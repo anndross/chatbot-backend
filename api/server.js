@@ -63,14 +63,14 @@ app.post("/api/chat", async (req, res) => {
       res.status(500).json({ error: "Ocorreu um erro ao processar sua solicitação." });
 
     }
-  });
+});
 
-const PORT = process.env.PORT || 3001;
+export default app;
 
 if (process.env.NODE_ENV !== "production") {
+    const PORT = process.env.PORT || 3001;
     app.listen(PORT, () => {
         console.log(`🚀 Servidor rodando localmente em http://localhost:${PORT}`);
     });
 }
 
-export default app;
