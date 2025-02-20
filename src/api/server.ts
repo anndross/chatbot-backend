@@ -1,5 +1,5 @@
 import express, { Request, Response, NextFunction } from "express";
-import { controller } from "../src/scripts/controller";
+import { controller } from "../scripts/controller.js";
 import rateLimit from "express-rate-limit";
 import cors from "cors";
 import dotenv from "dotenv";

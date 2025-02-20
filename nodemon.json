@@ -1,5 +1,0 @@
-{
-    "watch": ["api"],
-    "ext": "ts",
-    "exec": "concurrently 'npx tsc --watch' 'ts-node api/server.ts'"
-  }

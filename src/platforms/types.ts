@@ -1,4 +1,4 @@
-import { VtexProductData } from "./vtex/types";
+import { VtexProductData } from "./vtex/types.js";
 // import { ShopifyProductData } from "./shopify/types";
 
 // Mapeia cada plataforma para seu respectivo tipo de produto

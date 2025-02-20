@@ -1,5 +1,5 @@
-import { getProductData } from "./getProductData";
-import { splitProductData } from "./splitProductData";
+import { getProductData } from "./getProductData.js";
+import { splitProductData } from "./splitProductData.js";
 
 const vtexPlatform = {
     getProductData,

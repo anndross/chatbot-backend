@@ -1,4 +1,4 @@
-import vtexPlatform from "./vtex/index";
+import vtexPlatform from "./vtex/index.js";
 // import shopifyPlatform from "./shopify";
 
 export const platforms: Record<string, { 

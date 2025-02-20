@@ -1,9 +1,9 @@
-import OpenAI from "openai/index.mjs";
+import { OpenAI } from "openai/index.mjs";
 // import { GoogleGenerativeAI } from "@google/generative-ai";
 
-import { addMessage, getConversation } from "./utils/conversationHistoryController";
+import { addMessage, getConversation } from "./utils/conversationHistoryController.js";
 
-import { Message } from "./utils/conversationHistoryController";
+import { Message } from "./utils/conversationHistoryController.js";
 
 import dotenv from "dotenv";
 

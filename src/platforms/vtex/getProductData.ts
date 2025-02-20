@@ -1,9 +1,9 @@
 import axios from "axios";
 import dotenv from "dotenv";
 
-import { platforms } from "../../platforms";
-import { ProductData, PlatformProductDataMap } from "../../platforms/types";
-import { getPlatform } from '../../platforms/context';
+import { platforms } from "../../platforms/index.js";
+import { ProductData, PlatformProductDataMap } from "../../platforms/types.js";
+import { getPlatform } from '../../platforms/context.js';
 
 dotenv.config();
 

@@ -1,7 +1,7 @@
-import { platforms } from "../../platforms/index";
-import { getPlatform } from '../../platforms/context';
-import { addProductEmbeddings, searchRelevantInfo } from "./langchainClient";
-import { countTokens } from "./countTokens";
+import { platforms } from "../../platforms/index.js";
+import { getPlatform } from '../../platforms/context.js';
+import { addProductEmbeddings, searchRelevantInfo } from "./langchainClient.js";
+import { countTokens } from "./countTokens.js";
 
 export async function searchMeaningfulInfos(question: string, productData: any): Promise<string> {
     const platformName: string = getPlatform();

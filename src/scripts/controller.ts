@@ -1,7 +1,7 @@
 
-import { platforms } from "../platforms/index";
-import { setPlatform } from '../platforms/context';
-import { askToLLM } from "./askToLLM";
+import { platforms } from "../platforms/index.js";
+import { setPlatform } from '../platforms/context.js';
+import { askToLLM } from "./askToLLM.js";
 import { processInfoForChat } from "./utils/embeddingProcessor.js";
 
 import { Request, Response } from "express";
