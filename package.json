@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npm run build && node dist/api/server.js",
     "start:dev": "tsx watch src/api/server.ts",
-    "build": "tsup src --outDir dist && cp -r dist public"
+    "build": "tsup src"
   },
   "type": "module",
   "keywords": [],
