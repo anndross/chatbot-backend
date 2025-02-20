@@ -1,7 +1,5 @@
-import express from "express";
-
-import { controller } from "../src/scripts/controller.js";
-
+import express, { Request, Response, NextFunction } from "express";
+import { controller } from "../src/scripts/controller";
 import rateLimit from "express-rate-limit";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -16,7 +14,7 @@ app.use(cors({
     allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
-app.use((_req, res, next) => {
+app.use((_req: Request, res: Response, next: NextFunction) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
@@ -24,11 +22,11 @@ app.use((_req, res, next) => {
 });
 
 const limiter = rateLimit({
-    windowMs: 60 * 1000, // 1 minuto em milissegundos
+    windowMs: 60 * 1000, 
     max: 10,
-    keyGenerator: (req) => req.ip, // Usa o IP do cliente como chave
+    keyGenerator: (req) => req.ip as string,
     message: 'Você excedeu o limite de perguntas por minuto.',
-    handler: (req, res) => {
+    handler: (_req, res) => {
         res.status(429).json({
             message: 'Você excedeu o limite de perguntas por minuto.',
             resetTime: new Date(Date.now() + 60 * 1000).toISOString(),
@@ -44,24 +42,19 @@ app.use((req, res, next) => {
     next();
 });
 
-// app.options("*", cors());
 app.use(express.json());
 app.use(limiter);
 
-app.get("/", (req, res) => {
+app.get("/", (_req, res) => {
     res.json({ message: "🚀 API Chatbot VTEX rodando!" });
 });
 
-app.post("/api/chat", async (req, res) => {
+app.post("/api/chat", async (req: Request, res: Response) => {
     try {
-
         await controller(req, res);
-
     } catch (error) {
-
-      console.error("Erro na rota /api/chat:", error);
-      res.status(500).json({ error: "Ocorreu um erro ao processar sua solicitação." });
-
+        console.error("Erro na rota /api/chat:", error);
+        res.status(500).json({ error: "Ocorreu um erro ao processar sua solicitação." });
     }
 });
 
@@ -73,4 +66,3 @@ if (process.env.NODE_ENV !== "production") {
         console.log(`🚀 Servidor rodando localmente em http://localhost:${PORT}`);
     });
 }
-

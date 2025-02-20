@@ -1,7 +1,9 @@
 import OpenAI from "openai/index.mjs";
 // import { GoogleGenerativeAI } from "@google/generative-ai";
 
-import { addMessage, getConversation } from "./utils/conversationHistoryController.js";
+import { addMessage, getConversation } from "./utils/conversationHistoryController";
+
+import { Message } from "./utils/conversationHistoryController";
 
 import dotenv from "dotenv";
 
@@ -16,16 +18,22 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 // });
 
 // 🔥 Função principal para chamar a IA
-export async function askToLLM(meaningfulInfo, question, storeName, slug, conversationId) {
+export async function askToLLM(
+    meaningfulInfo: string, 
+    question: string, 
+    storeName: string, 
+    slug: string, 
+    conversationId: string
+): Promise<string> {
     // Adiciona a pergunta do usuário ao histórico
     addMessage(conversationId, {
         role: "user",
         content: question
     });
     
-    const conversationHistory = getConversation(conversationId);
+    const conversationHistory: Message[] = getConversation(conversationId);
 
-    const systemInstructions = {
+    const systemInstructions: Message = {
         role: "system", 
         content: `
             You are an assistant that answers questions about products based only on the following details: ${meaningfulInfo}
@@ -62,7 +70,7 @@ export async function askToLLM(meaningfulInfo, question, storeName, slug, conver
         ` 
     }
 
-    const messages = [systemInstructions, ...conversationHistory]
+    const messages: Message[] = [systemInstructions, ...conversationHistory]
 
     try {
         // Opção com a openrouter:
@@ -74,7 +82,7 @@ export async function askToLLM(meaningfulInfo, question, storeName, slug, conver
             response_format: { "type": "text" },
             max_completion_tokens: 500,
             presence_penalty: 0.3,
-            messages, 
+            messages,
         });
 
         if (!completion.choices || completion.choices.length === 0) {
@@ -83,18 +91,18 @@ export async function askToLLM(meaningfulInfo, question, storeName, slug, conver
         }
 
         console.log("Resposta do OpenRouter:", completion);
-        let responseText = completion.choices[0]?.message?.content;
-        responseText = responseText.replace(/```html|```/g, "").trim();
+        const responseText: string = completion.choices[0].message.content || "";
+        const cleanedResponse = responseText.replace(/```html|```/g, "").trim();
 
         // Adiciona a resposta do assistente ao histórico
         addMessage(conversationId, {
             role: "assistant",
-            content: responseText
+            content: cleanedResponse
         });
 
 
         return responseText || "Ops! Não achei essa informação, mas posso tentar responder outra pergunta sobre o produto.";
-    } catch (error) {
+    } catch (error: any) {
         console.error("❌ Erro ao chamar o modelo de LLM escolhido:", error);
 
         if (error.response?.data) {

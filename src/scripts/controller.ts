@@ -1,10 +1,12 @@
 
-import { platforms } from "../platforms/index.js";
-import { setPlatform } from '../platforms/context.js';
-import { askToLLM } from "./askToLLM.js";
+import { platforms } from "../platforms/index";
+import { setPlatform } from '../platforms/context';
+import { askToLLM } from "./askToLLM";
 import { processInfoForChat } from "./utils/embeddingProcessor.js";
 
-export async function controller(req, res) {
+import { Request, Response } from "express";
+
+export async function controller(req: Request, res: Response) {
     const { question, slug, storeName, platformName, conversationId } = req.body;
     
     if (!conversationId) {

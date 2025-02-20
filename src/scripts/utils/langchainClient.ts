@@ -5,36 +5,37 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const openaiEmbeddings = new OpenAIEmbeddings({
+const openaiEmbeddings: OpenAIEmbeddings = new OpenAIEmbeddings({
     modelName: "text-embedding-3-large",
-    openAIApiKey: process.env.OPENAI_API_KEY
+    openAIApiKey: process.env.OPENAI_API_KEY as string
 });
 
 // Banco de vetores em memória (substitui cosineSimilarity manual)
-const vectorStore = new MemoryVectorStore(openaiEmbeddings);
+const vectorStore: MemoryVectorStore = new MemoryVectorStore(openaiEmbeddings);
 
 /**
  * Função para adicionar dados do produto à base vetorial do LangChain
  */
-export async function addProductEmbeddings(productTexts) {
-    const embeddings = await openaiEmbeddings.embedDocuments(productTexts);
+export async function addProductEmbeddings(productTexts: string[]): Promise<void> {
+    const embeddings: number[][] = await openaiEmbeddings.embedDocuments(productTexts);
     
     console.log("🔍 Dimensão do vetor de embedding gerado:", embeddings[0].length);
 
-    await vectorStore.addDocuments(productTexts.map((text, index) => ({
+    await vectorStore.addDocuments(productTexts.map((text: string, index: number) => ({
         pageContent: text,
-        embedding: embeddings[index]
+        embedding: embeddings[index],
+        metadata: {}
     })));
 }
 
 /**
  * Função para buscar os trechos mais relevantes do produto com base na pergunta
  */
-export async function searchRelevantInfo(question, topK = 10) {
-    const embeddingQuestion = await openaiEmbeddings.embedQuery(question);
+export async function searchRelevantInfo(question: string, topK: number = 10): Promise<string> {
+    const embeddingQuestion: number[] = await openaiEmbeddings.embedQuery(question);
     console.log("🔍 Dimensão do vetor da pergunta:", embeddingQuestion.length);
 
-    const results = await vectorStore.similaritySearchVectorWithScore(embeddingQuestion, topK);
+    const results: [{ pageContent: string }, number][] = await vectorStore.similaritySearchVectorWithScore(embeddingQuestion, topK);
     
     console.log("📊 Resultados da busca semântica:", results.map(result => result[1]));
 
