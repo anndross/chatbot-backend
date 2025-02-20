@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "tsx src/api/server.ts",
+    "start": "npm run build && node dist/api/server.js",
     "start:dev": "tsx watch src/api/server.ts",
     "build": "tsup src"
   },
