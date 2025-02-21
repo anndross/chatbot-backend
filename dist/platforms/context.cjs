@@ -1,4 +1,3 @@
-"use strict";
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
@@ -17,16 +16,23 @@ var __copyProps = (to, from, except, desc) => {
 };
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-// src/scripts/utils/countTokens.ts
-var countTokens_exports = {};
-__export(countTokens_exports, {
-  countTokens: () => countTokens
+// src/platforms/context.ts
+var context_exports = {};
+__export(context_exports, {
+  getPlatform: () => getPlatform,
+  setPlatform: () => setPlatform
 });
-module.exports = __toCommonJS(countTokens_exports);
-function countTokens(text) {
-  return text.split(/\s+/).length;
+module.exports = __toCommonJS(context_exports);
+var currentPlatform = null;
+function setPlatform(platformName) {
+  currentPlatform = platformName;
+}
+function getPlatform() {
+  if (!currentPlatform) throw new Error("Plataforma n\xE3o definida.");
+  return currentPlatform;
 }
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
-  countTokens
+  getPlatform,
+  setPlatform
 });

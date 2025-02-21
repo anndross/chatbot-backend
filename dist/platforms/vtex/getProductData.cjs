@@ -1,4 +1,3 @@
-"use strict";
 var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -26,62 +25,35 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   mod
 ));
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
-
-// src/platforms/vtex/index.ts
-var vtex_exports = {};
-__export(vtex_exports, {
-  default: () => vtex_default
-});
-module.exports = __toCommonJS(vtex_exports);
-
-// src/platforms/vtex/getProductData.ts
-var import_axios = __toESM(require("axios"), 1);
-var import_dotenv = __toESM(require("dotenv"), 1);
-
-// src/platforms/index.ts
-var platforms = {
-  vtex: vtex_default
+var __async = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
 };
 
-// src/platforms/context.ts
-var currentPlatform = null;
-function getPlatform() {
-  if (!currentPlatform) throw new Error("Plataforma n\xE3o definida.");
-  return currentPlatform;
-}
-
 // src/platforms/vtex/getProductData.ts
-import_dotenv.default.config();
-async function getProductData(storeName, slug) {
-  const platformName = getPlatform();
-  if (!platforms[platformName]) {
-    console.error(`\u274C Plataforma "${platformName}" n\xE3o suportada.`);
-    return null;
-  }
-  const storeNameContent = storeName || process.env.VTEX_ACCOUNT_NAME;
-  const slugContent = slug || process.env.VTEX_LOCAL_SLUG;
-  const finalUrl = `https://www.${storeNameContent}.com.br/api/catalog_system/pub/products/search/${slugContent}/p`;
-  console.log("\u{1F50D} Full URL", finalUrl);
-  try {
-    const response = await import_axios.default.get(finalUrl, {
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      }
-    });
-    if (!response.data || response.data.length === 0) {
-      console.error(`\u274C Produto n\xE3o encontrado para a loja: ${storeNameContent}, slug: ${slugContent}`);
-      return null;
-    }
-    return response.data?.[0];
-  } catch (error) {
-    console.error(
-      `Erro ao buscar informa\xE7\xF5es do produto para a loja: ${storeNameContent}, slug: ${slugContent}`,
-      error.response?.data || error.message
-    );
-    return null;
-  }
-}
+var getProductData_exports = {};
+__export(getProductData_exports, {
+  getProductData: () => getProductData
+});
+module.exports = __toCommonJS(getProductData_exports);
+var import_axios = __toESM(require("axios"), 1);
+var import_dotenv = __toESM(require("dotenv"), 1);
 
 // src/platforms/vtex/splitProductData.ts
 function splitProductData(data, maxLength = 2e4) {
@@ -178,3 +150,55 @@ var vtexPlatform = {
   splitProductData
 };
 var vtex_default = vtexPlatform;
+
+// src/platforms/index.ts
+var platforms = {
+  vtex: vtex_default
+};
+
+// src/platforms/context.ts
+var currentPlatform = null;
+function getPlatform() {
+  if (!currentPlatform) throw new Error("Plataforma n\xE3o definida.");
+  return currentPlatform;
+}
+
+// src/platforms/vtex/getProductData.ts
+import_dotenv.default.config();
+function getProductData(storeName, slug) {
+  return __async(this, null, function* () {
+    var _a, _b;
+    const platformName = getPlatform();
+    if (!platforms[platformName]) {
+      console.error(`\u274C Plataforma "${platformName}" n\xE3o suportada.`);
+      return null;
+    }
+    const storeNameContent = storeName || process.env.VTEX_ACCOUNT_NAME;
+    const slugContent = slug || process.env.VTEX_LOCAL_SLUG;
+    const finalUrl = `https://www.${storeNameContent}.com.br/api/catalog_system/pub/products/search/${slugContent}/p`;
+    console.log("\u{1F50D} Full URL", finalUrl);
+    try {
+      const response = yield import_axios.default.get(finalUrl, {
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        }
+      });
+      if (!response.data || response.data.length === 0) {
+        console.error(`\u274C Produto n\xE3o encontrado para a loja: ${storeNameContent}, slug: ${slugContent}`);
+        return null;
+      }
+      return (_a = response.data) == null ? void 0 : _a[0];
+    } catch (error) {
+      console.error(
+        `Erro ao buscar informa\xE7\xF5es do produto para a loja: ${storeNameContent}, slug: ${slugContent}`,
+        ((_b = error.response) == null ? void 0 : _b.data) || error.message
+      );
+      return null;
+    }
+  });
+}
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  getProductData
+});

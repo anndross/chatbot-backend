@@ -1,4 +1,3 @@
-"use strict";
 var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -26,14 +25,33 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   mod
 ));
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var __async = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
 
-// src/api/index.ts
-var api_exports = {};
-__export(api_exports, {
-  default: () => api_default
+// src/scripts/controller.ts
+var controller_exports = {};
+__export(controller_exports, {
+  controller: () => controller
 });
-module.exports = __toCommonJS(api_exports);
-var import_express = __toESM(require("express"), 1);
+module.exports = __toCommonJS(controller_exports);
 
 // src/platforms/vtex/getProductData.ts
 var import_axios = __toESM(require("axios"), 1);
@@ -51,35 +69,38 @@ function getPlatform() {
 
 // src/platforms/vtex/getProductData.ts
 import_dotenv.default.config();
-async function getProductData(storeName, slug) {
-  const platformName = getPlatform();
-  if (!platforms[platformName]) {
-    console.error(`\u274C Plataforma "${platformName}" n\xE3o suportada.`);
-    return null;
-  }
-  const storeNameContent = storeName || process.env.VTEX_ACCOUNT_NAME;
-  const slugContent = slug || process.env.VTEX_LOCAL_SLUG;
-  const finalUrl = `https://www.${storeNameContent}.com.br/api/catalog_system/pub/products/search/${slugContent}/p`;
-  console.log("\u{1F50D} Full URL", finalUrl);
-  try {
-    const response = await import_axios.default.get(finalUrl, {
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      }
-    });
-    if (!response.data || response.data.length === 0) {
-      console.error(`\u274C Produto n\xE3o encontrado para a loja: ${storeNameContent}, slug: ${slugContent}`);
+function getProductData(storeName, slug) {
+  return __async(this, null, function* () {
+    var _a, _b;
+    const platformName = getPlatform();
+    if (!platforms[platformName]) {
+      console.error(`\u274C Plataforma "${platformName}" n\xE3o suportada.`);
       return null;
     }
-    return response.data?.[0];
-  } catch (error) {
-    console.error(
-      `Erro ao buscar informa\xE7\xF5es do produto para a loja: ${storeNameContent}, slug: ${slugContent}`,
-      error.response?.data || error.message
-    );
-    return null;
-  }
+    const storeNameContent = storeName || process.env.VTEX_ACCOUNT_NAME;
+    const slugContent = slug || process.env.VTEX_LOCAL_SLUG;
+    const finalUrl = `https://www.${storeNameContent}.com.br/api/catalog_system/pub/products/search/${slugContent}/p`;
+    console.log("\u{1F50D} Full URL", finalUrl);
+    try {
+      const response = yield import_axios.default.get(finalUrl, {
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        }
+      });
+      if (!response.data || response.data.length === 0) {
+        console.error(`\u274C Produto n\xE3o encontrado para a loja: ${storeNameContent}, slug: ${slugContent}`);
+        return null;
+      }
+      return (_a = response.data) == null ? void 0 : _a[0];
+    } catch (error) {
+      console.error(
+        `Erro ao buscar informa\xE7\xF5es do produto para a loja: ${storeNameContent}, slug: ${slugContent}`,
+        ((_b = error.response) == null ? void 0 : _b.data) || error.message
+      );
+      return null;
+    }
+  });
 }
 
 // src/platforms/vtex/splitProductData.ts
@@ -202,15 +223,17 @@ function getConversation(conversationId) {
 var import_dotenv2 = __toESM(require("dotenv"), 1);
 import_dotenv2.default.config();
 var openai = new import_openai.OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-async function askToLLM(meaningfulInfo, question, storeName, slug, conversationId) {
-  addMessage(conversationId, {
-    role: "user",
-    content: question
-  });
-  const conversationHistory2 = getConversation(conversationId);
-  const systemInstructions = {
-    role: "system",
-    content: `
+function askToLLM(meaningfulInfo, question, storeName, slug, conversationId) {
+  return __async(this, null, function* () {
+    var _a;
+    addMessage(conversationId, {
+      role: "user",
+      content: question
+    });
+    const conversationHistory2 = getConversation(conversationId);
+    const systemInstructions = {
+      role: "system",
+      content: `
             You are an assistant that answers questions about products based only on the following details: ${meaningfulInfo}
 
             - Your response must always be formatted exclusively in valid HTML. No Markdown, plain text, or any other format\u2014only raw HTML tags.
@@ -243,36 +266,37 @@ async function askToLLM(meaningfulInfo, question, storeName, slug, conversationI
 
             Keep your answers short, direct, and helpful. Remember: responses must always be in pure HTML, with no additional formatting.
         `
-  };
-  const messages = [systemInstructions, ...conversationHistory2];
-  try {
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
-      temperature: 0.5,
-      response_format: { "type": "text" },
-      max_completion_tokens: 500,
-      presence_penalty: 0.3,
-      messages
-    });
-    if (!completion.choices || completion.choices.length === 0) {
-      console.error("Resposta inesperada do LLM:", completion);
+    };
+    const messages = [systemInstructions, ...conversationHistory2];
+    try {
+      const completion = yield openai.chat.completions.create({
+        model: "gpt-4o-mini",
+        temperature: 0.5,
+        response_format: { "type": "text" },
+        max_completion_tokens: 500,
+        presence_penalty: 0.3,
+        messages
+      });
+      if (!completion.choices || completion.choices.length === 0) {
+        console.error("Resposta inesperada do LLM:", completion);
+        return "Desculpe, n\xE3o conseguir obter sua resposta no momento, sera que voc\xEA pode tentar mais tarde?.";
+      }
+      console.log("Resposta do OpenRouter:", completion);
+      const responseText = completion.choices[0].message.content || "";
+      const cleanedResponse = responseText.replace(/```html|```/g, "").trim();
+      addMessage(conversationId, {
+        role: "assistant",
+        content: cleanedResponse
+      });
+      return responseText || "Ops! N\xE3o achei essa informa\xE7\xE3o, mas posso tentar responder outra pergunta sobre o produto.";
+    } catch (error) {
+      console.error("\u274C Erro ao chamar o modelo de LLM escolhido:", error);
+      if ((_a = error.response) == null ? void 0 : _a.data) {
+        console.error("\u{1F4C4} Resposta do LLM escolhido:", error.response.data);
+      }
       return "Desculpe, n\xE3o conseguir obter sua resposta no momento, sera que voc\xEA pode tentar mais tarde?.";
     }
-    console.log("Resposta do OpenRouter:", completion);
-    const responseText = completion.choices[0].message.content || "";
-    const cleanedResponse = responseText.replace(/```html|```/g, "").trim();
-    addMessage(conversationId, {
-      role: "assistant",
-      content: cleanedResponse
-    });
-    return responseText || "Ops! N\xE3o achei essa informa\xE7\xE3o, mas posso tentar responder outra pergunta sobre o produto.";
-  } catch (error) {
-    console.error("\u274C Erro ao chamar o modelo de LLM escolhido:", error);
-    if (error.response?.data) {
-      console.error("\u{1F4C4} Resposta do LLM escolhido:", error.response.data);
-    }
-    return "Desculpe, n\xE3o conseguir obter sua resposta no momento, sera que voc\xEA pode tentar mais tarde?.";
-  }
+  });
 }
 
 // src/scripts/utils/langchainClient.ts
@@ -285,21 +309,25 @@ var openaiEmbeddings = new import_openai2.OpenAIEmbeddings({
   openAIApiKey: process.env.OPENAI_API_KEY
 });
 var vectorStore = new import_memory.MemoryVectorStore(openaiEmbeddings);
-async function addProductEmbeddings(productTexts) {
-  const embeddings = await openaiEmbeddings.embedDocuments(productTexts);
-  console.log("\u{1F50D} Dimens\xE3o do vetor de embedding gerado:", embeddings[0].length);
-  await vectorStore.addDocuments(productTexts.map((text, index) => ({
-    pageContent: text,
-    embedding: embeddings[index],
-    metadata: {}
-  })));
+function addProductEmbeddings(productTexts) {
+  return __async(this, null, function* () {
+    const embeddings = yield openaiEmbeddings.embedDocuments(productTexts);
+    console.log("\u{1F50D} Dimens\xE3o do vetor de embedding gerado:", embeddings[0].length);
+    yield vectorStore.addDocuments(productTexts.map((text, index) => ({
+      pageContent: text,
+      embedding: embeddings[index],
+      metadata: {}
+    })));
+  });
 }
-async function searchRelevantInfo(question, topK = 10) {
-  const embeddingQuestion = await openaiEmbeddings.embedQuery(question);
-  console.log("\u{1F50D} Dimens\xE3o do vetor da pergunta:", embeddingQuestion.length);
-  const results = await vectorStore.similaritySearchVectorWithScore(embeddingQuestion, topK);
-  console.log("\u{1F4CA} Resultados da busca sem\xE2ntica:", results.map((result) => result[1]));
-  return results.map((res) => res[0].pageContent).join(" ");
+function searchRelevantInfo(question, topK = 10) {
+  return __async(this, null, function* () {
+    const embeddingQuestion = yield openaiEmbeddings.embedQuery(question);
+    console.log("\u{1F50D} Dimens\xE3o do vetor da pergunta:", embeddingQuestion.length);
+    const results = yield vectorStore.similaritySearchVectorWithScore(embeddingQuestion, topK);
+    console.log("\u{1F4CA} Resultados da busca sem\xE2ntica:", results.map((result) => result[1]));
+    return results.map((res) => res[0].pageContent).join(" ");
+  });
 }
 
 // src/scripts/utils/countTokens.ts
@@ -308,97 +336,50 @@ function countTokens(text) {
 }
 
 // src/scripts/utils/embeddingProcessor.ts
-async function searchMeaningfulInfos(question, productData) {
-  const platformName = getPlatform();
-  const texts = platforms[platformName] && platforms[platformName].splitProductData(productData);
-  await addProductEmbeddings(texts);
-  console.log("\u{1F50D} Dados do produto adicionados ao banco vetorial!");
-  const selectedTexts = await searchRelevantInfo(question);
-  console.log("\u{1F50D} Selected texts:", selectedTexts);
-  const tokensAfter = countTokens(selectedTexts);
-  console.log(`\u2705 Tokens after filtering: ${tokensAfter}`);
-  return selectedTexts;
+function searchMeaningfulInfos(question, productData) {
+  return __async(this, null, function* () {
+    const platformName = getPlatform();
+    const texts = platforms[platformName] && platforms[platformName].splitProductData(productData);
+    yield addProductEmbeddings(texts);
+    console.log("\u{1F50D} Dados do produto adicionados ao banco vetorial!");
+    const selectedTexts = yield searchRelevantInfo(question);
+    console.log("\u{1F50D} Selected texts:", selectedTexts);
+    const tokensAfter = countTokens(selectedTexts);
+    console.log(`\u2705 Tokens after filtering: ${tokensAfter}`);
+    return selectedTexts;
+  });
 }
-async function processInfoForChat(question, productJsonData) {
-  const meaningfulInfo = await searchMeaningfulInfos(question, productJsonData);
-  const tokensSent = countTokens(meaningfulInfo);
-  console.log(`\u{1F680} Tokens sent to OpenAI: ${tokensSent}`);
-  return meaningfulInfo;
+function processInfoForChat(question, productJsonData) {
+  return __async(this, null, function* () {
+    const meaningfulInfo = yield searchMeaningfulInfos(question, productJsonData);
+    const tokensSent = countTokens(meaningfulInfo);
+    console.log(`\u{1F680} Tokens sent to OpenAI: ${tokensSent}`);
+    return meaningfulInfo;
+  });
 }
 
 // src/scripts/controller.ts
-async function controller(req, res) {
-  const { question, slug, storeName, platformName, conversationId } = req.body;
-  if (!conversationId) {
-    return res.status(400).json({ error: "\xC9 necess\xE1rio fornecer um conversationId." });
-  }
-  if (!slug && process.env.NODE_ENV === "production") {
-    return res.status(400).json({ error: "Slug do produto \xE9 obrigat\xF3rio." });
-  }
-  if (!platformName || !platforms[platformName]) {
-    return res.status(400).json({ error: "Plataforma inv\xE1lida ou n\xE3o suportada." });
-  } else {
-    setPlatform(platformName);
-  }
-  const productDetails = await platforms[platformName].getProductData(storeName, slug);
-  const meaningfulInfo = await processInfoForChat(question, productDetails);
-  const responseText = await askToLLM(meaningfulInfo, question, storeName, slug, conversationId);
-  return res.json({ response: responseText });
-}
-
-// src/api/index.ts
-var import_express_rate_limit = __toESM(require("express-rate-limit"), 1);
-var import_cors = __toESM(require("cors"), 1);
-var import_dotenv4 = __toESM(require("dotenv"), 1);
-import_dotenv4.default.config();
-var app = (0, import_express.default)();
-app.use((0, import_cors.default)({
-  origin: "*",
-  methods: ["GET", "POST", "OPTIONS", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"]
-}));
-app.use((_req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  next();
-});
-var limiter = (0, import_express_rate_limit.default)({
-  windowMs: 60 * 1e3,
-  max: 10,
-  keyGenerator: (req) => req.ip,
-  message: "Voc\xEA excedeu o limite de perguntas por minuto.",
-  handler: (_req, res) => {
-    res.status(429).json({
-      message: "Voc\xEA excedeu o limite de perguntas por minuto.",
-      resetTime: new Date(Date.now() + 60 * 1e3).toISOString()
-    });
-  }
-});
-app.use((req, res, next) => {
-  req.setTimeout(6e4, () => {
-    console.warn("\u23F3 Tempo limite atingido para a requisi\xE7\xE3o.");
-    res.status(504).json({ error: "Tempo limite atingido. Tente novamente mais tarde." });
-  });
-  next();
-});
-app.use(import_express.default.json());
-app.use(limiter);
-app.get("/", (_req, res) => {
-  res.json({ message: "\u{1F680} API Chatbot VTEX rodando!" });
-});
-app.post("/api/chat", async (req, res) => {
-  try {
-    await controller(req, res);
-  } catch (error) {
-    console.error("Erro na rota /api/chat:", error);
-    res.status(500).json({ error: "Ocorreu um erro ao processar sua solicita\xE7\xE3o." });
-  }
-});
-var api_default = app;
-if (process.env.NODE_ENV !== "production") {
-  const PORT = process.env.PORT || 3e3;
-  app.listen(PORT, () => {
-    console.log(`\u{1F680} Servidor rodando localmente em http://localhost:${PORT}`);
+function controller(req, res) {
+  return __async(this, null, function* () {
+    const { question, slug, storeName, platformName, conversationId } = req.body;
+    if (!conversationId) {
+      return res.status(400).json({ error: "\xC9 necess\xE1rio fornecer um conversationId." });
+    }
+    if (!slug && process.env.NODE_ENV === "production") {
+      return res.status(400).json({ error: "Slug do produto \xE9 obrigat\xF3rio." });
+    }
+    if (!platformName || !platforms[platformName]) {
+      return res.status(400).json({ error: "Plataforma inv\xE1lida ou n\xE3o suportada." });
+    } else {
+      setPlatform(platformName);
+    }
+    const productDetails = yield platforms[platformName].getProductData(storeName, slug);
+    const meaningfulInfo = yield processInfoForChat(question, productDetails);
+    const responseText = yield askToLLM(meaningfulInfo, question, storeName, slug, conversationId);
+    return res.json({ response: responseText });
   });
 }
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  controller
+});

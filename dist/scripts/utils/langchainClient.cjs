@@ -1,4 +1,3 @@
-"use strict";
 var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -26,6 +25,26 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   mod
 ));
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var __async = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
 
 // src/scripts/utils/langchainClient.ts
 var langchainClient_exports = {};
@@ -43,21 +62,25 @@ var openaiEmbeddings = new import_openai.OpenAIEmbeddings({
   openAIApiKey: process.env.OPENAI_API_KEY
 });
 var vectorStore = new import_memory.MemoryVectorStore(openaiEmbeddings);
-async function addProductEmbeddings(productTexts) {
-  const embeddings = await openaiEmbeddings.embedDocuments(productTexts);
-  console.log("\u{1F50D} Dimens\xE3o do vetor de embedding gerado:", embeddings[0].length);
-  await vectorStore.addDocuments(productTexts.map((text, index) => ({
-    pageContent: text,
-    embedding: embeddings[index],
-    metadata: {}
-  })));
+function addProductEmbeddings(productTexts) {
+  return __async(this, null, function* () {
+    const embeddings = yield openaiEmbeddings.embedDocuments(productTexts);
+    console.log("\u{1F50D} Dimens\xE3o do vetor de embedding gerado:", embeddings[0].length);
+    yield vectorStore.addDocuments(productTexts.map((text, index) => ({
+      pageContent: text,
+      embedding: embeddings[index],
+      metadata: {}
+    })));
+  });
 }
-async function searchRelevantInfo(question, topK = 10) {
-  const embeddingQuestion = await openaiEmbeddings.embedQuery(question);
-  console.log("\u{1F50D} Dimens\xE3o do vetor da pergunta:", embeddingQuestion.length);
-  const results = await vectorStore.similaritySearchVectorWithScore(embeddingQuestion, topK);
-  console.log("\u{1F4CA} Resultados da busca sem\xE2ntica:", results.map((result) => result[1]));
-  return results.map((res) => res[0].pageContent).join(" ");
+function searchRelevantInfo(question, topK = 10) {
+  return __async(this, null, function* () {
+    const embeddingQuestion = yield openaiEmbeddings.embedQuery(question);
+    console.log("\u{1F50D} Dimens\xE3o do vetor da pergunta:", embeddingQuestion.length);
+    const results = yield vectorStore.similaritySearchVectorWithScore(embeddingQuestion, topK);
+    console.log("\u{1F4CA} Resultados da busca sem\xE2ntica:", results.map((result) => result[1]));
+    return results.map((res) => res[0].pageContent).join(" ");
+  });
 }
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {

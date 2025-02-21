@@ -1,8 +1,11 @@
-"use strict";
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
 var __copyProps = (to, from, except, desc) => {
   if (from && typeof from === "object" || typeof from === "function") {
     for (let key of __getOwnPropNames(from))
@@ -13,6 +16,16 @@ var __copyProps = (to, from, except, desc) => {
 };
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-// src/platforms/vtex/types.ts
-var types_exports = {};
-module.exports = __toCommonJS(types_exports);
+// src/scripts/utils/countTokens.ts
+var countTokens_exports = {};
+__export(countTokens_exports, {
+  countTokens: () => countTokens
+});
+module.exports = __toCommonJS(countTokens_exports);
+function countTokens(text) {
+  return text.split(/\s+/).length;
+}
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  countTokens
+});
