@@ -35,6 +35,7 @@ Thumbs.db
 # 🔹 Ignorar build e cache da Vercel
 .cache/
 build/
+dist/
 
 # 🔹 Ignorar pasta específica de dependências no backend
 backend/node_modules/
