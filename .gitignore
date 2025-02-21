@@ -33,7 +33,6 @@ debug.log
 Thumbs.db
 
 # 🔹 Ignorar build e cache da Vercel
-dist/
 .cache/
 build/
 
