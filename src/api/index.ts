@@ -62,9 +62,9 @@ app.post('/api/chat', async (req: Request, res: Response) => {
 
 export default app;
 
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== 'Production') {
     const PORT = process.env.PORT || 3000;
-    app.listen(PORT, () => {
+    app.listen({ port: PORT, host: '0.0.0.0' }, () => {
         console.log(`🚀 Servidor rodando localmente em http://localhost:${PORT}`);
     });
 }
