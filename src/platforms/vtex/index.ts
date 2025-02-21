@@ -1,10 +1,9 @@
-import { getProductData } from "./getProductData.js";
-import { splitProductData } from "./splitProductData.js";
+import { getProductData } from './getProductData';
+import { splitProductData } from './splitProductData';
 
 const vtexPlatform = {
     getProductData,
-    splitProductData
-
-}
+    splitProductData,
+};
 
 export default vtexPlatform;
