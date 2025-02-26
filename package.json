@@ -6,6 +6,7 @@
     "scripts": {
         "start": "node dist/api/index.js",
         "start:dev": "tsx watch src/api/index.ts",
+        "jwt": "tsx src/scripts/utils/generateJWT.ts",
         "build": "tsup"
     },
     "keywords": [],
@@ -21,15 +22,18 @@
         "axios": "^1.7.9",
         "concurrently": "^9.1.2",
         "cors": "^2.8.5",
+        "crypto": "^1.0.1",
         "dotenv": "^16.4.7",
         "express": "^4.21.2",
         "express-rate-limit": "^7.5.0",
+        "firebase-admin": "^12.7.0",
         "langchain": "^0.3.15",
         "openai": "^4.82.0"
     },
     "devDependencies": {
         "@types/cors": "^2.8.17",
         "@types/express": "^5.0.0",
+        "@types/jsonwebtoken": "^9.0.9",
         "@types/node": "^22.13.4",
         "nodemon": "^3.1.9",
         "tsup": "^8.3.6",

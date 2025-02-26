@@ -12,10 +12,6 @@ pnpm-debug.log*
 .env.production
 .env.test
 
-# 🔹 Ignorar cache do Vercel
-.vercel/
-.now/
-
 # 🔹 Ignorar cache do editor (VS Code, JetBrains, etc.)
 .vscode/
 .idea/
@@ -49,3 +45,7 @@ backend/.git
 # 🔹 Ignorar arquivos de deploy automático
 .vscode/
 .vercel
+
+.chatbotclients-firebase-adminsdk-fbsvc-bed4bfd9f4.json
+./chatbotclients-firebase-adminsdk-fbsvc-bed4bfd9f4.json
+chatbotclients-firebase-adminsdk-fbsvc-bed4bfd9f4.js/

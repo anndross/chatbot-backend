@@ -13,9 +13,8 @@ const openaiEmbeddings: OpenAIEmbeddings = new OpenAIEmbeddings({
 // Banco de vetores em memória (substitui cosineSimilarity manual)
 const vectorStore: MemoryVectorStore = new MemoryVectorStore(openaiEmbeddings);
 
-/**
- * Função para adicionar dados do produto à base vetorial do LangChain
- */
+
+// Função para adicionar dados do produto à base vetorial do LangChain
 export async function addProductEmbeddings(productTexts: string[]): Promise<void> {
     const embeddings: number[][] = await openaiEmbeddings.embedDocuments(productTexts);
     
@@ -28,9 +27,7 @@ export async function addProductEmbeddings(productTexts: string[]): Promise<void
     })));
 }
 
-/**
- * Função para buscar os trechos mais relevantes do produto com base na pergunta
- */
+// Função para buscar os trechos mais relevantes do produto com base na pergunta
 export async function searchRelevantInfo(question: string, topK: number = 10): Promise<string> {
     const embeddingQuestion: number[] = await openaiEmbeddings.embedQuery(question);
     console.log("🔍 Dimensão do vetor da pergunta:", embeddingQuestion.length);
