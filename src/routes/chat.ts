@@ -3,7 +3,7 @@ import { controller } from '@/scripts/controller';
 
 const router = express.Router();
 
-router.post('/api/chat', async (req: Request, res: Response) => {
+router.post('/chat', async (req: Request, res: Response) => {
     try {
         await controller(req, res);
     } catch (error) {
