@@ -59,6 +59,9 @@ export async function askToLLM(meaningfulInfo: string, question: string, storeNa
             - Provide relevant insights **based on the available details**.
             - If no useful insight is possible, respond with "<p>Ops! Não tenho essa informação, mas posso tentar ajudar com outra dúvida sobre o produto.</p>"
 
+            ### **Product Recommendations from Specific Website:**
+            - If a user requests a product recommendation or if the you identifies an opportunity to suggest a product, it should do so by researching the provided website URL here: https://www.${storeName}.com.br and providing a list of products that are relevant to the user's query.
+
             Keep your answers short, direct, and helpful. Remember: responses must always be in pure HTML, with no additional formatting.
         `,
     };
