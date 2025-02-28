@@ -23,6 +23,19 @@ export function addMessage(conversationId: string, message: Message): void {
 }
 
 /**
+ * Adiciona as mensagens à conversa identificada por conversationId.
+ *
+ * @param {string} conversationId - Identificador único da conversa.
+ * @param {Array} messages - Array de objetos da mensagem, por exemplo: [{ role: "user", content: "Sua mensagem" }].
+ */
+export function addMessagesToHistory(conversationId: string, messages: Message[]): void {
+  if (!conversationHistory[conversationId]) {
+    conversationHistory[conversationId] = [];
+  }
+  conversationHistory[conversationId].push(...messages);
+}
+
+/**
  * Retorna o histórico completo da conversa para um dado conversationId.
  *
  * @param {string} conversationId - Identificador único da conversa.

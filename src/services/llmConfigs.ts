@@ -1,32 +1,7 @@
-import { addMessage, getConversation } from './utils/conversationHistoryController';
+import { Message } from '../scripts/utils/conversationHistoryController';
 
-import { Message } from './utils/conversationHistoryController';
-import { OpenAI } from 'openai';
-import dotenv from 'dotenv';
-
-// import { GoogleGenerativeAI } from "@google/generative-ai";
-
-dotenv.config();
-
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-// const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-
-// const openRouter = new OpenAI({
-//     baseURL: "https://openrouter.ai/api/v1",
-//     apiKey: process.env.OPENROUTER_API_KEY
-// });
-
-// 🔥 Função principal para chamar a IA
-export async function askToLLM(meaningfulInfo: string, question: string, storeName: string, slug: string, conversationId: string): Promise<string> {
-    // Adiciona a pergunta do usuário ao histórico
-    addMessage(conversationId, {
-        role: 'user',
-        content: question,
-    });
-
-    const conversationHistory: Message[] = getConversation(conversationId);
-
-    const systemInstructions: Message = {
+export const getSystemInstructions = (meaningfulInfo: string, storeName: string): Message => {
+    return {
         role: 'system',
         content: `
             You are an assistant that answers questions about products based only on the following details: ${meaningfulInfo} or researching the provided website URL here: https://www.${storeName}.com.br
@@ -65,46 +40,5 @@ export async function askToLLM(meaningfulInfo: string, question: string, storeNa
 
             Keep your answers short, direct, and helpful. Remember: responses must always be in pure HTML, with no additional formatting.
         `,
-    };
-
-    const messages: Message[] = [systemInstructions, ...conversationHistory];
-
-    try {
-        // Opção com a openrouter:
-        // openRouter.chat.completions.create
-
-        const completion = await openai.chat.completions.create({
-            model: 'gpt-4o-mini',
-            temperature: 0.5,
-            response_format: { type: 'text' },
-            max_completion_tokens: 500,
-            presence_penalty: 0.3,
-            messages,
-        });
-
-        if (!completion.choices || completion.choices.length === 0) {
-            console.error('Resposta inesperada do LLM:', completion);
-            return 'Desculpe, não conseguir obter sua resposta no momento, sera que você pode tentar mais tarde?.';
-        }
-
-        console.log('Resposta do OpenRouter:', completion);
-        const responseText: string = completion.choices[0].message.content || '';
-        const cleanedResponse = responseText.replace(/```html|```/g, '').trim();
-
-        // Adiciona a resposta do assistente ao histórico
-        addMessage(conversationId, {
-            role: 'assistant',
-            content: cleanedResponse,
-        });
-
-        return responseText || 'Ops! Não achei essa informação, mas posso tentar responder outra pergunta sobre o produto.';
-    } catch (error: any) {
-        console.error('❌ Erro ao chamar o modelo de LLM escolhido:', error);
-
-        if (error.response?.data) {
-            console.error('📄 Resposta do LLM escolhido:', error.response.data);
-        }
-
-        return 'Desculpe, não conseguir obter sua resposta no momento, sera que você pode tentar mais tarde?.';
     }
-}
+};

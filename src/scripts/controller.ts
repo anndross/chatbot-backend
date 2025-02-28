@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-import { askToLLM } from './askToLLM';
+import { askToLLM } from '../services/askToLLM';
 import { platforms } from '@/platforms/index';
 import { processInfoForChat } from './utils/embeddingProcessor';
 import { setPlatform } from '@/platforms/context';
