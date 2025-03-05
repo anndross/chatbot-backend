@@ -28,7 +28,7 @@ export async function addProductEmbeddings(productTexts: string[]): Promise<void
 }
 
 // Função para buscar os trechos mais relevantes do produto com base na pergunta
-export async function searchRelevantInfo(question: string, topK: number = 10): Promise<string> {
+export async function searchRelevantInfo(question: string, topK: number = 15): Promise<string> {
     const embeddingQuestion: number[] = await openaiEmbeddings.embedQuery(question);
     console.log("🔍 Dimensão do vetor da pergunta:", embeddingQuestion.length);
 

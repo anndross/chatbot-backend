@@ -17,7 +17,7 @@ export async function getProductData<P extends keyof PlatformProductDataMap>(sto
 
     const storeNameContent = storeName || process.env.VTEX_ACCOUNT_NAME;
     const slugContent = slug || process.env.VTEX_LOCAL_SLUG;
-    const finalUrl = `https://www.${storeNameContent}.com.br/api/catalog_system/pub/products/search/${slugContent}/p`;
+    const finalUrl = `https://${storeNameContent}.myvtex.com/api/catalog_system/pub/products/search/${slugContent}/p`;
 
     console.log('🔍 Full URL', finalUrl);
 

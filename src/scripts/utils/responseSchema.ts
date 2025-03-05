@@ -6,7 +6,7 @@ export const responseSchema = {
             type: "array",
             items: { 
                 type: "string",
-                enum: ["add_to_cart", "see_more"]
+                enum: ["add_to_cart", "see_more", "recommend_product"]
             },
             additionalItems: false // 🚀 Evita erros de schema inválido
         },
@@ -16,11 +16,8 @@ export const responseSchema = {
                 type: "object",
                 properties: {
                     id: { type: "string" },
-                    name: { type: "string" },
-                    url: { type: "string" },
-                    price: { type: "number" }
                 },
-                required: ["id", "name", "url", "price"],
+                required: ["id"],
                 additionalProperties: false // 🚀 Evita erros de schema inválido
             }
         }
@@ -46,8 +43,5 @@ export interface ResponseSchema {
     actions: string[];
     recommended_products: {
         id: string;
-        name: string;
-        url: string;
-        price: number;
     }[];
 }
