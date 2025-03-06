@@ -9,6 +9,7 @@ import { requestTimeout } from '../middlewares/requestTimeout';
 import authRouter from '../routes/auth';
 import chatRouter from '../routes/chat';
 import testRouter from '../routes/test';
+import getProducts from '../routes/getProducts';
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.use(apiRateLimiter);
 // Rotas
 app.use("/api", authRouter);
 app.use("/api", chatRouter);
+app.use("/api", getProducts);
 app.use("/", testRouter);
 
 export default app;

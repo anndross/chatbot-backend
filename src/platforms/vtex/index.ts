@@ -1,8 +1,9 @@
-import { getProductData } from './getProductData';
+import { getProductData, getAllRecommendations } from './getProductData';
 import { splitProductData } from './splitProductData';
 
 const vtexPlatform = {
     getProductData,
+    getAllRecommendations,
     splitProductData,
 };
 

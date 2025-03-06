@@ -25,7 +25,7 @@ export async function askToLLM(meaningfulInfo: string, question: string, storeNa
     try {
         const completion = await openai.chat.completions.create({
             model: 'gpt-4o-mini',
-            temperature: 0.5,
+            temperature: 0.3,
             max_completion_tokens: 500,
             presence_penalty: 0.3,
             messages,

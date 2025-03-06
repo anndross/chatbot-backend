@@ -39,7 +39,8 @@ export const getSystemInstructions = (meaningfulInfo: string, storeName: string)
             - Only provide calculations **if they are directly related to the product.**
 
             ## **Product Recommendations (Using "Combinam")**
-            - When a product has a **"Combinam"** attribute, the values inside must be treated as related product IDs.
+            - When a product has a **"Combinam"** attribute, the values inside must be treated as related product IDs this field will always be an array with values splitted by comma.
+            - Example: Combinam: [ "7, 1" ]
             - Use these IDs to extract **only** the corresponding product details.
             - If related products exist, **they MUST be added to the "recommended_products" array**, but **DO NOT mention them in the HTML response**.
             - The response must appear natural and independent of the recommendation.

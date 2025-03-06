@@ -135,3 +135,18 @@ export interface ReferenceId {
     Key: string;
     Value: string;
 }
+
+// ------
+
+export interface RecommendedProductsIds {
+    id: string;
+}[];
+
+export interface RecommendedProduct {
+    name: string;
+    imageUrl: string;
+    price: number;
+    listPrice: number;
+    itemId: string;
+    link: string;
+}
