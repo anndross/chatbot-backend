@@ -90,8 +90,6 @@ export async function getAllRecommendations(recommendedProductsIds: RecommendedP
                 return null;
             }
 
-            console.log("✅ Resposta do produto recomendado:", response.data.productName);
-
             const firstSku = response.data[0].items[0];
             const { name, itemId } = firstSku;
             const { imageUrl } = firstSku.images[0];
@@ -101,7 +99,7 @@ export async function getAllRecommendations(recommendedProductsIds: RecommendedP
 
             recommendedProducts.push({ name, imageUrl, price, listPrice, itemId, link });
 
-            console.log("✅ Informações do produto recomendado:", name, imageUrl, price);
+            console.log("✅ Informações do produto recomendado:", name);
         } catch (error) {
             console.error("❌ Erro ao obter informações do produto recomendado:", error);
         }

@@ -10,6 +10,7 @@ import authRouter from '../routes/auth';
 import chatRouter from '../routes/chat';
 import testRouter from '../routes/test';
 import getProducts from '../routes/getProducts';
+import addProduct from '../routes/addProduct';
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.use(apiRateLimiter);
 app.use("/api", authRouter);
 app.use("/api", chatRouter);
 app.use("/api", getProducts);
+app.use("/api", addProduct);
 app.use("/", testRouter);
 
 export default app;

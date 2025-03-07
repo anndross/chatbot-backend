@@ -150,3 +150,9 @@ export interface RecommendedProduct {
     itemId: string;
     link: string;
 }
+
+export interface Product {
+    id: string;
+    quantity: number;
+    seller: string;
+}
