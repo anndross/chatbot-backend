@@ -3,12 +3,18 @@ import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { isValidClient } from "../models/clients";
 
+interface AuthPayload {
+  clientId: string;
+}
+
 export const getAccessTokenController = async (
   req: Request,
   res: Response,
   _next: NextFunction
 ): Promise<void> => {
-  const { clientId } = req.body;
+  const { clientId }: AuthPayload = req.body;
+
+  const clientHost = `${req.protocol}://${req.get("host")}`;
 
   console.log('🔍 ClientId recebido:', clientId);
 
@@ -18,7 +24,7 @@ export const getAccessTokenController = async (
     return;
   }
 
-  const isValid = await isValidClient(clientId);
+  const isValid = await isValidClient(clientId, clientHost);
   
   if (!isValid) {
     res.status(401).json({ error: "Unauthorized client" });

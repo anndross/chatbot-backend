@@ -32,13 +32,16 @@ const getClient = async (clientId: string): Promise<Client | null> => {
  * Check if the clientId (host) is valid.
  * In production
  */
-export const isValidClient = async  (clientId: string): Promise<boolean> => {
+export const isValidClient = async  (clientId: string, requestHost: string | undefined): Promise<boolean> => {
   const client = await getClient(clientId);
 
-  if (client && client.paymentStatus === 'paid') {
-    console.log('✅ Cliente pagante:');
+  console.log('🔍 Host do cliente:', requestHost);
+  const isAuthHost = (client?.hostname === requestHost || requestHost === "http://localhost:3000")
+
+  if (client && client.paymentStatus === 'paid' && isAuthHost) {
     return true;
   }
-  console.log('❌ Cliente não pagante:', client);
+  
+  console.log('❌ Cliente não pagante ou host inválido:', client);
   return false;
 };
