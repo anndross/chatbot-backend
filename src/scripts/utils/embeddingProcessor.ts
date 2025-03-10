@@ -15,6 +15,7 @@ export async function searchMeaningfulInfos(question: string, productData: any):
 
     // Buscar os trechos mais relevantes da pergunta
     const selectedTexts: string = await searchRelevantInfo(question);
+    console.log('🔍 Question: ', question);
     console.log('🔍 Selected texts:', selectedTexts);
 
     // Contar tokens depois da filtragem
