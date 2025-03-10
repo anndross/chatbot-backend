@@ -27,7 +27,7 @@ export async function askToLLM(meaningfulInfo: string, question: string, storeNa
             model: 'gpt-4o-mini',
             temperature: 0.3,
             max_completion_tokens: 500,
-            presence_penalty: 0.3,
+            presence_penalty: -1.0,
             messages,
             response_format: {
                 type: "json_schema",

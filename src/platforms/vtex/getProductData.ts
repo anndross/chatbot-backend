@@ -96,8 +96,9 @@ export async function getAllRecommendations(recommendedProductsIds: RecommendedP
             const price = firstSku.sellers[0].commertialOffer.Price;
             const listPrice = firstSku.sellers[0].commertialOffer.ListPrice;
             const link = response.data[0].link;
+            const sellerId = firstSku.sellers[0].sellerId;
 
-            recommendedProducts.push({ name, imageUrl, price, listPrice, itemId, link });
+            recommendedProducts.push({ name, imageUrl, price, listPrice, itemId, link, sellerId });
 
             console.log("✅ Informações do produto recomendado:", name);
         } catch (error) {

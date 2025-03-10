@@ -18,6 +18,7 @@ export const addProductController = async (req: Request, res: Response, _next: N
     console.log('🔍 Loja recebida:', storeName);
 
     for (const [key, value] of Object.entries(requiredFields)) {
+        console.log("/add-product");
         if (!value) {
             console.error(`❌ Missing ${key}`);
             res.status(400).json({ error: `Missing ${key}` });
@@ -27,7 +28,7 @@ export const addProductController = async (req: Request, res: Response, _next: N
 
     // Adicionar o produto à loja selecionada
     const isSuccess = await platforms[platformName].addToCart(product, orderFormId, storeName);
-    
+
     if (!isSuccess) {
         res.status(500).json({ error: "Failed to add product" });
         console.error('❌ Failed to add product');
