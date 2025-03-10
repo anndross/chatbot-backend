@@ -18,7 +18,7 @@ export async function getProductData<P extends keyof PlatformProductDataMap>(sto
 
     const storeNameContent = storeName || process.env.VTEX_ACCOUNT_NAME;
     const slugContent = slug || process.env.VTEX_LOCAL_SLUG;
-    const finalUrl = `https://${storeNameContent}.myvtex.com/api/catalog_system/pub/products/search/${slugContent}/p`;
+    const finalUrl = `https://www.${storeNameContent}.com.br/api/catalog_system/pub/products/search/${slugContent}/p`;
 
     console.log('🔍 Full URL', finalUrl);
 
@@ -75,7 +75,7 @@ export async function getAllRecommendations(recommendedProductsIds: RecommendedP
     let recommendedProducts = [];
 
     for (const productId of parsedRecommendedProductsIds) {
-        const finalUrl = `https://${storeNameContent}.myvtex.com/api/catalog_system/pub/products/search/?fq=productId:${productId}`;
+        const finalUrl = `https://www.${storeNameContent}.com.br/api/catalog_system/pub/products/search/?fq=productId:${productId}`;
 
         try {
             const response = await axios.get(finalUrl, {
@@ -91,7 +91,8 @@ export async function getAllRecommendations(recommendedProductsIds: RecommendedP
             }
 
             const firstSku = response.data[0].items[0];
-            const { name, itemId } = firstSku;
+            const { nameComplete, itemId } = firstSku;
+            const name = nameComplete;
             const { imageUrl } = firstSku.images[0];
             const price = firstSku.sellers[0].commertialOffer.Price;
             const listPrice = firstSku.sellers[0].commertialOffer.ListPrice;

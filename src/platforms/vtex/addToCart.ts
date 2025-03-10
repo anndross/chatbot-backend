@@ -10,7 +10,7 @@ interface Product {
 
 export async function addToCart(product: Product, orderFormId: string, storeName: string): Promise<boolean> {
     const storeNameContent = storeName || process.env.VTEX_ACCOUNT_NAME;
-    const finalUrl = `https://${storeNameContent}.myvtex.com/api/checkout/pub/orderForm/${orderFormId}/items`;
+    const finalUrl = `https://www.${storeNameContent}.com.br/api/checkout/pub/orderForm/${orderFormId}/items`;
 
     console.log('🔍 Full URL', finalUrl);
 
