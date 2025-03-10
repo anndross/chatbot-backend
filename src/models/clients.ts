@@ -36,12 +36,12 @@ export const isValidClient = async  (clientId: string, requestHost: string | und
   const client = await getClient(clientId);
 
   console.log('🔍 Host do cliente:', requestHost);
-  const isAuthHost = (client?.hostname === requestHost || requestHost === "http://localhost:3000")
+  const isAuthHost = (client?.hostname === requestHost || requestHost === "http://127.0.0.1:5500")
 
   if (client && client.paymentStatus === 'paid' && isAuthHost) {
     return true;
   }
-  
+
   console.log('❌ Cliente não pagante ou host inválido:', client);
   return false;
 };

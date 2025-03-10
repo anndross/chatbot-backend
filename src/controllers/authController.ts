@@ -14,7 +14,7 @@ export const getAccessTokenController = async (
 ): Promise<void> => {
   const { clientId }: AuthPayload = req.body;
 
-  const clientHost = `${req.protocol}://${req.get("host")}`;
+  const clientHost = req.get("origin");
 
   console.log('🔍 ClientId recebido:', clientId);
 
