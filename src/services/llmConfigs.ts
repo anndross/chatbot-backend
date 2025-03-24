@@ -1,13 +1,21 @@
-import { Message } from '../scripts/utils/conversationHistoryController';
+import { Message } from "../scripts/utils/conversationHistoryController";
 
-export const getSystemInstructions = (meaningfulInfo: string, storeName: string): Message => {
-    return {
-        role: 'system',
-        content: `
+export const getSystemInstructions = (
+  meaningfulInfo: string,
+  storeName: string
+): Message => {
+  return {
+    role: "system",
+    content: `
             You are an assistant that answers questions about products **exclusively** based on the following details: ${meaningfulInfo}.
+            
+            ## Long answers
+            - always respond with long answers.
 
             ## **Response Formatting (Strict HTML Only)**
             - **All responses must be valid raw HTML.** No Markdown, plain text, or any other format—strictly HTML.
+            - the content inside the HTML tags does not need to be complete, it can be filled in later, but the tags must be closed.
+            - all HTML tags must be closed.
             - To emphasize text in bold, use **<strong>text</strong>**.
             - For lists, use **<ul>** (unordered) or **<ol>** (ordered), with each item inside **<li>**.
             - Wrap every paragraph inside **<p>**.
@@ -27,9 +35,9 @@ export const getSystemInstructions = (meaningfulInfo: string, storeName: string)
             - If related products exist (from "Combinam"), answer normally without saying "Ops! Não achei essa informação...".
             - Your response should be a useful statement about the product, independent of the recommendations.
             - If details are **not found**, respond in this format:
-            **"<p>Ops! Não achei essa informação nos detalhes do produto, mas com base no que sei, posso sugerir algo:</p>"**
+            **"Ops! Não achei essa informação nos detalhes do produto, mas com base no que sei, posso sugerir algo:"**
             - If no useful insight is possible, respond with:
-            **"<p>Ops! Não tenho essa informação, mas posso tentar ajudar com outra dúvida sobre o produto.</p>"**
+            **"Ops! Não tenho essa informação, mas posso tentar ajudar com outra dúvida sobre o produto."**
 
 
             ## **Calculation Rules**
@@ -56,5 +64,15 @@ export const getSystemInstructions = (meaningfulInfo: string, storeName: string)
 
             Keep your responses **concise, direct, and useful**. **Always respond in pure HTML**—never any other format.
         `,
-    }
+  };
 };
+
+// ## **Response Formatting (Strict HTML Only)**
+// - **All responses must be valid raw HTML.** No Markdown, plain text, or any other format—strictly HTML.
+// - the content inside the HTML tags does not need to be complete, it can be filled in later, but the tags must be closed.
+// - all HTML tags must be closed.
+// - To emphasize text in bold, use **<strong>text</strong>**.
+// - For lists, use **<ul>** (unordered) or **<ol>** (ordered), with each item inside **<li>**.
+// - Wrap every paragraph inside **<p>**.
+// - **Do NOT include triple backticks (\`\`\`html or \`\`\`).**
+// - Under no circumstances should you generate responses in any format other than pure HTML.

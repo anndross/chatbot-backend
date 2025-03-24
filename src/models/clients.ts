@@ -14,7 +14,7 @@ export interface Client {
 const getClient = async (clientId: string): Promise<Client | null> => {
   const querySnapshot = await db
     .collection("users")
-    .where("clientId", "==", clientId)
+    .where("clientId", "==", "casa_mais_facil_cb")
     .get();
 
   if (!querySnapshot.empty) {
