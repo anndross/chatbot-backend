@@ -1,21 +1,21 @@
 {
-    "$schema": "https://json.schemastore.org/tsconfig",
+  "$schema": "https://json.schemastore.org/tsconfig",
 
-    "_version": "18.2.0",
+  "_version": "18.2.0",
 
-    "compilerOptions": {
-        "lib": ["es2023"],
-        "module": "node16",
-        "target": "es2022",
+  "compilerOptions": {
+    "lib": ["es2023"],
+    "module": "node16",
+    "target": "es2022",
 
-        "strict": true,
-        "esModuleInterop": true,
-        "skipLibCheck": true,
-        "moduleResolution": "node16",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node16",
 
-        "baseUrl": ".",
-        "paths": {
-            "@/*": ["./src/*"]
-        }
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": ["./src/*"]
     }
+  }
 }

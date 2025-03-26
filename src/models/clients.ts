@@ -14,7 +14,7 @@ export interface Client {
 const getClient = async (clientId: string): Promise<Client | null> => {
   const querySnapshot = await db
     .collection("users")
-    .where("clientId", "==", "casa_mais_facil_cb")
+    .where("clientId", "==", clientId)
     .get();
 
   if (!querySnapshot.empty) {
@@ -35,7 +35,7 @@ export const isValidClient = async (
   clientId: string,
   requestHost: string | undefined
 ): Promise<boolean> => {
-  const client = await getClient(clientId);
+  const client = await getClient("casa_mais_facil_cb");
 
   console.log("🔍 Host do cliente:", requestHost);
   const isAuthHost =

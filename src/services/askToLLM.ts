@@ -48,14 +48,14 @@ export async function askToLLM(
       presence_penalty: -1.0,
       stream: true, // Habilita streaming
       messages,
-      // response_format: {
-      //   type: "json_schema",
-      //   json_schema: {
-      //     name: "ecommerce_assistant",
-      //     strict: true,
-      //     schema: responseSchema,
-      //   },
-      // },
+      response_format: {
+        type: "json_schema",
+        json_schema: {
+          name: "ecommerce_assistant",
+          strict: true,
+          schema: responseSchema,
+        },
+      },
     });
 
     // const llmResponseString: string = completion.choices[0].message.content || '';
