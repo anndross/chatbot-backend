@@ -1,21 +1,19 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-
   "_version": "18.2.0",
-
   "compilerOptions": {
     "lib": ["es2023"],
-    "module": "node16",
-    "target": "es2022",
-
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "target": "ESNext",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "moduleResolution": "node16",
-
-    "baseUrl": "./src",
+    "baseUrl": "./",
     "paths": {
-      "@/*": ["./src/*"]
-    }
+      "@/*": ["src/*"]
+    },
+    "allowJs": true,
+    "outDir": "dist"
   }
 }
