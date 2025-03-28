@@ -1,16 +1,16 @@
-// src/config/firebase.ts
 import admin from "firebase-admin";
-import path from "path";
+import { readFileSync } from "fs";
+import { resolve } from "path";
 
-// Se o arquivo estiver na raiz do projeto:
-const serviceAccount = require(path.resolve(
-  __dirname,
-  "../../chatbotclients-firebase-adminsdk-fbsvc-bed4bfd9f4.json"
-));
+const serviceAccountPath = resolve(
+  process.cwd(),
+  "src/config/chatbotclients-firebase-adminsdk-fbsvc-bed4bfd9f4.json"
+);
+
+const serviceAccount = JSON.parse(readFileSync(serviceAccountPath, "utf-8"));
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  //   databaseURL: process.env.FIREBASE_DATABASE_URL || "https://<seu-project-id>.firebaseio.com",
 });
 
 const db = admin.firestore();
