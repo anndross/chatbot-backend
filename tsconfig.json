@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "lib": ["es2023"],
+    "types": ["node", "express"],
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "target": "ESNext",
