@@ -1,1 +1,1 @@
-export type ThirdPartiesSupportedPlatforms = "vtex";
+export type SupportedPlatforms = "vtex";

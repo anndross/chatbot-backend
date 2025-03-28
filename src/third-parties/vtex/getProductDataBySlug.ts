@@ -1,40 +1,24 @@
-import { VtexProductData } from "@/types/third-parties/methods-by-platform/vtex/product-data";
-import { RecommendedProductsIds, RecommendedProduct } from "./types";
-
+import { VtexProductBySlug } from "@/types/third-parties/vtex/product-by-slug";
 import axios from "axios";
 
 export async function getProductDataBySlug(
-  storeName: string,
+  store: string,
   slug: string
-): Promise<VtexProductData | null> {
-  const storeNameContent = storeName || process.env.VTEX_ACCOUNT_NAME;
-  const slugContent = slug || process.env.VTEX_LOCAL_SLUG;
-  const finalUrl = `https://www.${storeNameContent}.com.br/api/catalog_system/pub/products/search/${slugContent}/p`;
-
-  console.log("🔍 Full URL", finalUrl);
+): Promise<VtexProductBySlug | null> {
+  const endpoint = `https://www.${store}.com.br/api/catalog_system/pub/products/search/${slug}/p`;
 
   try {
-    const response = await axios.get(finalUrl, {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    });
+    const { data } = await axios.get(endpoint);
 
-    if (!response.data || response.data.length === 0) {
-      console.error(
-        `❌ Produto não encontrado para a loja: ${storeNameContent}, slug: ${slugContent}`
+    if (!data || !data.length)
+      throw new Error(
+        `❌ Produto não encontrado para a loja: ${store}, slug: ${slug}`
       );
-      return null;
-    }
 
-    // Retorna os dados do produto com a tipagem correta baseada na plataforma
-    return response.data?.[0] as ProductData<P>;
-  } catch (error: any) {
-    console.error(
-      `Erro ao buscar informações do produto para a loja: ${storeNameContent}, slug: ${slugContent}`,
-      error.response?.data || error.message
-    );
+    return data[0];
+  } catch (error) {
+    console.error(error);
+
     return null;
   }
 }

@@ -1,7 +1,7 @@
-import { PlatformsMethods } from "@/types/third-parties/supported-methods";
-import { Platforms } from "@/types/third-parties/supported-platforms";
+import { SupportedMethods } from "@/types/third-parties/supported-methods";
+import { SupportedPlatforms } from "@/types/third-parties/supported-platforms";
 import { vtexMethods } from "./vtex";
 
-export const thirdParties: Record<Platforms, PlatformsMethods> = {
+export const thirdParties: Record<SupportedPlatforms, SupportedMethods> = {
   vtex: vtexMethods,
 };

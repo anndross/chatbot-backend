@@ -1,35 +1,61 @@
+import { AuthRequest } from "@/middlewares/Auth.middleware";
 import { thirdParties } from "@/third-parties";
-import { Platforms } from "@/types/third-parties/supported-platforms";
-import { Request, Response, NextFunction } from "express";
+import { ControllerResponse } from "@/types/controller-response";
+import { VtexRecommendedProducts } from "@/types/third-parties/vtex/recommended-products";
+import { SupportedPlatforms } from "@/types/third-parties/supported-platforms";
+import { Request, Response } from "express";
 
-type RecommendedProductsBody = {
+type RecommendedProductsControllerBody = {
   recommendedProductsIds: string[];
   store: string;
-  platformName: Platforms;
+  platformName: SupportedPlatforms;
+};
+
+type RecommendedProductsControllerData = {
+  data: VtexRecommendedProducts;
 };
 
 export const getRecommendedProductsController = async (
   req: Request,
-  res: Response,
-  _next: NextFunction
+  res: Response
 ): Promise<Response> => {
-  const { recommendedProductsIds, store, platformName } =
-    req.body as RecommendedProductsBody;
+  const { recommendedProductsIds } =
+    req.body as RecommendedProductsControllerBody;
 
-  if (!recommendedProductsIds || recommendedProductsIds.length === 0) {
-    return res.status(400).json({ error: "Missing recommendedProductsIds" });
+  const { platformName, name: store } = (req as AuthRequest)?.customer || {};
+
+  if (!recommendedProductsIds || !recommendedProductsIds.length) {
+    return res
+      .status(400)
+      .json({ error: "É necessário que os IDs sejam fornecidos." });
   }
 
-  const platformMethods = thirdParties[platformName];
-
-  const products = await platformMethods.getRecommendedProducts(
-    recommendedProductsIds,
-    store
-  );
-
-  if (!products || products.length === 0) {
-    return res.status(400).json({ error: "Products not found" });
+  if (!platformName) {
+    return res
+      .status(400)
+      .json({ error: "O cliente não tem uma plataforma cadastrada." });
   }
 
-  return res.json({ recommendedProductsData: products });
+  if (!store) {
+    return res
+      .status(400)
+      .json({ error: "O cliente não tem uma loja cadastrada." });
+  }
+
+  try {
+    const platformMethods = thirdParties[platformName];
+
+    const products = await platformMethods.getRecommendedProducts(
+      recommendedProductsIds,
+      store
+    );
+
+    if (!products || products.length === 0)
+      throw new Error("Produtos não encontrados");
+
+    return res.json({ data: products });
+  } catch (error) {
+    console.error(error);
+    return res.status(400).json({ error: "Produtos não encontrados" });
+  }
 };

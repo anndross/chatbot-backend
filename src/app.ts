@@ -1,12 +1,15 @@
 import express from "express";
 import { InitMiddlewares } from "@/middlewares";
 import { InitRoutes } from "@/routes";
+import { errorHandler } from "./middlewares/ErrorHandler.middleware";
 
 const app = express();
 
 InitMiddlewares(app);
 
 InitRoutes(app);
+
+app.use(errorHandler as any);
 
 export default app;
 

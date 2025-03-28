@@ -1,41 +1,30 @@
-import { RecommendedProduct } from "@/types/third-parties/methods-by-platform/vtex/product-data";
-import { RecommendedProductsResponse } from "@/types/third-parties/methods-by-platform/vtex/recommended-products";
+import { VtexRecommendedProducts } from "@/types/third-parties/vtex/recommended-products";
 import axios from "axios";
 
 export async function getRecommendedProducts(
   recommendedProductsIds: string[],
-  storeName: string
-): Promise<RecommendedProduct[] | null> {
-  const storeNameContent = storeName || process.env.VTEX_ACCOUNT_NAME;
+  store: string
+): Promise<VtexRecommendedProducts> {
+  let recommendedProducts: VtexRecommendedProducts = [];
 
-  let recommendedProducts: RecommendedProductsResponse = [];
+  try {
+    for (const productId of recommendedProductsIds) {
+      const endpoint = `https://www.${store}.com.br/api/catalog_system/pub/products/search/?fq=productId:${productId}`;
 
-  for (const productId of recommendedProductsIds) {
-    const finalUrl = `https://www.${storeNameContent}.com.br/api/catalog_system/pub/products/search/?fq=productId:${productId}`;
+      const { data } = await axios.get(endpoint);
 
-    try {
-      const response = await axios.get(finalUrl, {
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      });
-
-      if (!response.data || response.data.length === 0) {
-        console.error(
-          `❌ Produto não encontrado para a loja: ${storeNameContent}, productId: ${productId}`
+      if (!data || !data?.length)
+        throw new Error(
+          `❌ Produto não encontrado para a loja: ${store}, productId: ${productId}`
         );
 
-        return null;
-      }
-
-      const firstSku = response.data[0].items[0];
+      const firstSku = data[0].items[0];
       const { nameComplete, itemId } = firstSku;
       const name = nameComplete;
       const { imageUrl } = firstSku.images[0];
       const price = firstSku.sellers[0].commertialOffer.Price;
       const listPrice = firstSku.sellers[0].commertialOffer.ListPrice;
-      const link = response.data[0].link;
+      const link = data[0].link;
       const sellerId = firstSku.sellers[0].sellerId;
 
       recommendedProducts.push({
@@ -47,10 +36,12 @@ export async function getRecommendedProducts(
         link,
         sellerId,
       });
-    } catch (error) {
-      console.error(error);
     }
-  }
 
-  return recommendedProducts;
+    return recommendedProducts;
+  } catch (error) {
+    console.error(error);
+
+    return [];
+  }
 }

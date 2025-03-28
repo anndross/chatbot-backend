@@ -1,10 +1,10 @@
-import { ThirdPartiesSupportedPlatforms } from "./third-parties/supported-platforms";
+import { SupportedPlatforms } from "./third-parties/supported-platforms";
 
 export interface Customer {
   clientId: string;
   name: string;
   hostname: string;
   paymentStatus: string;
-  platformName: ThirdPartiesSupportedPlatforms;
+  platformName: SupportedPlatforms;
   services: string[];
 }

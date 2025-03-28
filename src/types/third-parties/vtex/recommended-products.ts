@@ -1,4 +1,4 @@
-export type RecommendedProductsResponse = {
+export type VtexRecommendedProducts = {
   name: string;
   imageUrl: string;
   price: number;

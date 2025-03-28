@@ -9,5 +9,4 @@ export function InitMiddlewares(app: express.Application) {
   app.use(requestTimeoutMiddleware);
   app.use(express.json());
   app.use(rateLimiterMiddleware);
-  app.use(errorHandler);
 }

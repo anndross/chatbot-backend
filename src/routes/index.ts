@@ -3,7 +3,7 @@ import { authMiddleware } from "@/middlewares/Auth.middleware";
 
 import chatRouter from "@/routes/Chat.routes";
 import customerRouter from "@/routes/Customer.routes";
-import thirdPartyRouter from "@/routes/ThirdParty.routes";
+import thirdPartiesRouter from "@/routes/ThirdParties.routes";
 
 export function InitRoutes(app: Application) {
   // rotas do chat
@@ -13,5 +13,5 @@ export function InitRoutes(app: Application) {
   app.use("/api", customerRouter);
 
   // rotas de terceiros
-  app.use("/api", authMiddleware, thirdPartyRouter);
+  app.use("/api", authMiddleware, thirdPartiesRouter);
 }

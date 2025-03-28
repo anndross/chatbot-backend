@@ -13,6 +13,6 @@ export const corsMiddleware = cors({
     }
   },
   methods: ["GET", "POST", "OPTIONS", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+  allowedHeaders: ["Content-Type", "authorization"],
   credentials: true,
 });

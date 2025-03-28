@@ -1,4 +1,4 @@
-export interface VtexProductData {
+export interface VtexProductBySlug {
   cacheId: string;
   productId: string;
   description: string;
@@ -21,40 +21,40 @@ export interface VtexProductData {
   origin: string;
 }
 
-export interface PriceRange {
+export type PriceRange = {
   sellingPrice: PriceDetails;
   listPrice: PriceDetails;
-}
+};
 
-export interface PriceDetails {
+export type PriceDetails = {
   highPrice: number;
   lowPrice: number;
-}
+};
 
-export interface SpecificationGroup {
+export type SpecificationGroup = {
   originalName: string;
   name: string;
   specifications: Specification[];
-}
+};
 
-export interface Specification {
+export type Specification = {
   originalName: string;
   name: string;
   values: string[];
-}
+};
 
-export interface Cluster {
+export type Cluster = {
   id: string;
   name: string;
-}
+};
 
-export interface Property {
+export type Property = {
   name: string;
   originalName: string;
   values: string[];
-}
+};
 
-export interface ProductItem {
+export type ProductItem = {
   sellers: Seller[];
   images: ProductImage[];
   itemId: string;
@@ -70,17 +70,17 @@ export interface ProductItem {
   videos: any[];
   attachments: any[];
   isKit: boolean;
-}
+};
 
-export interface Seller {
+export type Seller = {
   sellerId: string;
   sellerName: string;
   addToCartLink: string;
   sellerDefault: boolean;
   commertialOffer: CommercialOffer;
-}
+};
 
-export interface CommercialOffer {
+export type CommercialOffer = {
   DeliverySlaSamplesPerRegion: Record<string, any>;
   DeliverySlaSamples: any[];
   AvailableQuantity: number;
@@ -100,18 +100,18 @@ export interface CommercialOffer {
   GetInfoErrorMessage: string | null;
   CacheVersionUsedToCallCheckout: string;
   teasers: Teaser[];
-}
+};
 
-export interface Installment {
+export type Installment = {
   Value: number;
   InterestRate: number;
   TotalValuePlusInterestRate: number;
   NumberOfInstallments: number;
   Name: string;
   PaymentSystemName: string;
-}
+};
 
-export interface Teaser {
+export type Teaser = {
   name: string;
   conditions: {
     minimumQuantity: number;
@@ -120,33 +120,18 @@ export interface Teaser {
   effects: {
     parameters: { name: string; value: string }[];
   };
-}
+};
 
-export interface ProductImage {
+export type ProductImage = {
   imageId: string;
   cacheId: string;
   imageTag: string;
   imageLabel: string;
   imageText: string;
   imageUrl: string;
-}
+};
 
-export interface ReferenceId {
+export type ReferenceId = {
   Key: string;
   Value: string;
-}
-
-export interface RecommendedProduct {
-  name: string;
-  imageUrl: string;
-  price: number;
-  listPrice: number;
-  itemId: string;
-  link: string;
-}
-
-export interface Product {
-  id: string;
-  quantity: number;
-  seller: string;
-}
+};

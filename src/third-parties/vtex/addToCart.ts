@@ -1,44 +1,34 @@
+import { VtexProductToAdd } from "@/types/third-parties/vtex/add-to-cart";
 import axios from "axios";
 
-interface Product {
-  id: string;
-  quantity: number;
-  seller: string;
-}
-
 export async function addToCart(
-  product: Product,
+  product: VtexProductToAdd,
   orderFormId: string,
-  storeName: string
+  store: string
 ): Promise<boolean> {
-  const storeNameContent = storeName || process.env.VTEX_ACCOUNT_NAME;
-  const finalUrl = `https://www.${storeNameContent}.com.br/api/checkout/pub/orderForm/${orderFormId}/items`;
-
-  console.log("🔍 Full URL", finalUrl);
+  const endpoint = `https://www.${store}.com.br/api/checkout/pub/orderForm/${orderFormId}/items`;
 
   try {
-    const response = await axios.post(finalUrl, {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
+    const { data } = await axios.post(
+      endpoint,
+      {
+        orderItems: [product],
       },
-      orderItems: [product],
-    });
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      }
+    );
 
-    if (!response.data) {
-      console.error(
-        `❌ Erro ao adicionar o produto para a loja: ${storeNameContent}`
-      );
-      return false;
-    }
+    if (!data)
+      throw new Error(`❌ Erro ao adicionar o produto para a loja: ${store}`);
 
-    // Retorna os dados do produto com a tipagem correta baseada na plataforma
     return true;
   } catch (error: any) {
-    console.error(
-      `Erro ao adicionar o produto para a loja: ${storeNameContent}`,
-      error.response?.data || error.message
-    );
+    console.error(error);
+
     return false;
   }
 }

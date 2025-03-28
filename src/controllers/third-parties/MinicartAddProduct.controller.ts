@@ -1,46 +1,56 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response } from "express";
 
-import { platforms } from "@/platforms/index";
-import { setPlatform } from "@/platforms/context";
+import { VtexProductToAdd } from "@/types/third-parties/vtex/add-to-cart";
+import { AuthRequest } from "@/middlewares/Auth.middleware";
+import { thirdParties } from "@/third-parties";
+import { ControllerResponse } from "@/types/controller-response";
+
+type MinicartAddProductControllerBody = {
+  product: VtexProductToAdd;
+  orderFormId: string;
+};
 
 export const minicartAddProductController = async (
   req: Request,
-  res: Response,
-  _next: NextFunction
-): Promise<void> => {
-  const { product, orderFormId } = req.body;
-  const requiredFields = { product, orderFormId, storeName };
+  res: Response
+): Promise<ControllerResponse> => {
+  const { product, orderFormId } = req.body as MinicartAddProductControllerBody;
 
-  if (!platformName || !platforms[platformName]) {
-    res.status(400).json({ error: "Plataforma inválida ou não suportada." });
-    return;
-  } else {
-    setPlatform(platformName);
+  const { name: store, platformName } = (req as AuthRequest).customer || {};
+
+  if (!product || orderFormId?.length) {
+    return res.status(400).json({
+      error:
+        "É necessário que todos os parâmetros sejam fornecidos (product e orderFormId).",
+    });
   }
 
-  console.log("🔍 Producto recebido:", product);
-  console.log("🔍 Loja recebida:", storeName);
-
-  for (const [key, value] of Object.entries(requiredFields)) {
-    console.log("/add-product");
-    if (!value) {
-      console.error(`❌ Missing ${key}`);
-      res.status(400).json({ error: `Missing ${key}` });
-    }
+  if (!platformName) {
+    return res
+      .status(400)
+      .json({ error: "O cliente não tem uma plataforma cadastrada." });
   }
 
-  // Adicionar o produto à loja selecionada
-  const isSuccess = await platforms[platformName].addToCart(
-    product,
-    orderFormId,
-    storeName
-  );
-
-  if (!isSuccess) {
-    res.status(500).json({ error: "Failed to add product" });
-    console.error("❌ Failed to add product");
-    return;
+  if (!store) {
+    return res
+      .status(400)
+      .json({ error: "O cliente não tem uma loja cadastrada." });
   }
 
-  res.json({ success: true });
+  try {
+    const platformMethods = thirdParties[platformName];
+
+    const wasAdded = await platformMethods.addToCart(
+      product,
+      orderFormId,
+      store
+    );
+
+    if (!wasAdded) throw new Error("Produto não adicionado.");
+
+    return res.status(200).json({ success: true });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Produto não adicionado." });
+  }
 };

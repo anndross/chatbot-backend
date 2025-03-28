@@ -3,7 +3,7 @@ import AppError from "@/config/errorHandler";
 import logger from "@/config/logger";
 
 export function errorHandler(
-  err: AppError | Error,
+  err: Error | AppError,
   req: Request,
   res: Response,
   _next: NextFunction
