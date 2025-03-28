@@ -13,6 +13,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "resolutions": {
+    "esbuild": "^0.25.0"
+  },
   "dependencies": {
     "@dqbd/tiktoken": "^1.0.20",
     "@express-rate-limit/tsconfig": "^1.0.2",
@@ -34,7 +37,6 @@
     "redis": "^4.7.0",
     "tsconfig-paths": "^4.2.0",
     "tsup": "^8.3.6",
-    "esbuild": "0.25.0",
     "winston": "^3.17.0"
   },
   "devDependencies": {
@@ -45,5 +47,8 @@
     "nodemon": "^3.1.9",
     "tsx": "^4.19.3",
     "typescript": "^5.7.3"
+  },
+  "peerDependencies": {
+    "esbuild": "^0.25.0"
   }
 }
