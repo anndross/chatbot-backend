@@ -14,11 +14,12 @@ export async function chatController(
   const { question, conversationId } = req.body;
 
   const origin = req.headers?.origin;
-  const { pathname } = origin ? new URL(origin) : {};
+  // const { pathname } = origin ? new URL(origin) : {};
 
-  const slug =
-    (env.isDevelopment ? env.customerSlug : pathname?.replace("/", "")) || "";
-
+  // const slug =
+  //   (env.isDevelopment ? env.customerSlug : pathname?.replace("/", "")) || "";
+  // console.log(slug, pathname);
+  const slug = req.url;
   const { name, hostname, platformName } = (req as AuthRequest).customer || {};
 
   if (!platformName) {
