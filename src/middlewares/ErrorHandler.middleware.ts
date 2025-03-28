@@ -18,5 +18,4 @@ export function errorHandler(
     stack: err.stack,
   });
   res.status(500).json({ error: "Internal Server Error" });
-  return;
 }

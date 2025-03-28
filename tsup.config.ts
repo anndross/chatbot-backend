@@ -16,6 +16,6 @@ export default defineConfig({
   ],
   esbuildOptions(options) {
     options.conditions = ["module", "import", "require"];
-    options.outExtension = { ".js": ".js" }; // Adiciona extensões apenas na build
+    options.outExtension = { ".js": ".cjs" }; // Adiciona a extensão .cjs para arquivos CommonJS
   },
 });

@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "node -r tsconfig-paths/register dist/app.js",
+    "start": "node -r tsconfig-paths/register dist/app.cjs",
     "start:dev": "tsx watch --tsconfig tsconfig.json src/app.ts",
     "jwt": "tsx src/scripts/utils/generateJWT.ts",
     "build": "tsup"
