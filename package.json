@@ -9,6 +9,7 @@
     "jwt": "tsx src/scripts/utils/generateJWT.ts",
     "build": "tsup"
   },
+  "type": "module",
   "keywords": [],
   "author": "",
   "license": "ISC",
