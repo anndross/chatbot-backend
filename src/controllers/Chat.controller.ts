@@ -4,22 +4,14 @@ import { AuthRequest } from "@/middlewares/Auth.middleware.ts";
 import { sendAnswerToSheets } from "@/services/chat/sendAnswerToSheets.ts";
 import { AskToLLM } from "@/services/chat/ask-to-llm/index.ts";
 import { getProductDataAsVector } from "@/services/chat/vectorizer-product-data/index.ts";
-import { env } from "@/config/env.ts";
 import { getHostName } from "@/utils/getHostName.ts";
 
 export async function chatController(
   req: Request,
   res: Response
 ): Promise<void> {
-  const { question, conversationId } = req.body;
+  const { question, conversationId, slug } = req.body;
 
-  const origin = req.headers?.origin;
-  // const { pathname } = origin ? new URL(origin) : {};
-
-  // const slug =
-  //   (env.isDevelopment ? env.customerSlug : pathname?.replace("/", "")) || "";
-  // console.log(slug, pathname);
-  const slug = req.url;
   const { name, hostname, platformName } = (req as AuthRequest).customer || {};
 
   if (!platformName) {
