@@ -6,7 +6,7 @@ export default defineConfig({
   outDir: "dist",
   splitting: false,
   sourcemap: true,
-  format: ["esm", "cjs"], // Gera ESM e CJS
+  format: ["cjs"], // Gera ESM e CJS
   dts: true,
   clean: true,
   esbuildPlugins: [
@@ -16,6 +16,6 @@ export default defineConfig({
   ],
   esbuildOptions(options) {
     options.conditions = ["module", "import", "require"];
-    options.outExtension = { ".js": ".cjs" }; // Adiciona a extensão .cjs para arquivos CommonJS
+    options.outExtension = { ".js": ".cjs" };
   },
 });
