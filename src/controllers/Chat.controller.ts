@@ -48,6 +48,14 @@ export async function chatController(
         slug
       )) || [];
 
+    console.log(
+      "Informações sobre o vetor do produto para o chat",
+      productDataAsVector,
+      platformName,
+      getHostName(hostname),
+      slug
+    );
+
     const askToLLM = new AskToLLM(
       question,
       conversationId,
