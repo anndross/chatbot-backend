@@ -3,7 +3,7 @@
   "_version": "18.2.0",
   "compilerOptions": {
     "lib": ["es2023"],
-    "types": ["node", "express"],
+    "types": ["node"],
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "target": "ESNext",
