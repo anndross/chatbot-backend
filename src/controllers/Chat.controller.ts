@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
 
-import { AuthRequest } from "@/middlewares/Auth.middleware";
-import { sendAnswerToSheets } from "@/services/chat/sendAnswerToSheets";
-import { AskToLLM } from "@/services/chat/ask-to-llm";
-import { getProductDataAsVector } from "@/services/chat/vectorizer-product-data";
-import { env } from "@/config/env";
-import { getHostName } from "@/utils/getHostName";
+import { AuthRequest } from "@/middlewares/Auth.middleware.ts";
+import { sendAnswerToSheets } from "@/services/chat/sendAnswerToSheets.ts";
+import { AskToLLM } from "@/services/chat/ask-to-llm/index.ts";
+import { getProductDataAsVector } from "@/services/chat/vectorizer-product-data/index.ts";
+import { env } from "@/config/env.ts";
+import { getHostName } from "@/utils/getHostName.ts";
 
 export async function chatController(
   req: Request,

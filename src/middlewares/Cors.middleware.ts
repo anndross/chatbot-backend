@@ -1,4 +1,4 @@
-import { allowedOrigins } from "@/config/allowed-origins";
+import { allowedOrigins } from "@/config/allowed-origins.ts";
 import cors from "cors";
 
 export const corsMiddleware = cors({

@@ -1,5 +1,5 @@
-import { SupportedPlatforms } from "@/types/third-parties/supported-platforms";
-import { vtexVectorProductData } from "./platforms/vtex";
+import { SupportedPlatforms } from "@/types/third-parties/supported-platforms.ts";
+import { vtexVectorProductData } from "./platforms/vtex.ts";
 
 export const getVectorizedProductDataByPlatform: Record<
   SupportedPlatforms,

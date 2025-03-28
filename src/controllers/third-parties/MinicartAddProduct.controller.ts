@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 
-import { VtexProductToAdd } from "@/types/third-parties/vtex/add-to-cart";
-import { AuthRequest } from "@/middlewares/Auth.middleware";
-import { thirdParties } from "@/third-parties";
-import { getHostName } from "@/utils/getHostName";
+import { VtexProductToAdd } from "@/types/third-parties/vtex/add-to-cart.ts";
+import { AuthRequest } from "@/middlewares/Auth.middleware.ts";
+import { thirdParties } from "@/third-parties/index.ts";
+import { getHostName } from "@/utils/getHostName.ts";
 
 type MinicartAddProductControllerBody = {
   product: VtexProductToAdd;

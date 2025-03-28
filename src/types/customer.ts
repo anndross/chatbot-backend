@@ -1,4 +1,4 @@
-import { SupportedPlatforms } from "./third-parties/supported-platforms";
+import { SupportedPlatforms } from "./third-parties/supported-platforms.ts";
 
 export interface Customer {
   clientId: string;

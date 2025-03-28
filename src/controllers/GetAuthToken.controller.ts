@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express";
-import { CustomerModel } from "@/models/Customer.model";
-import { generateToken } from "@/services/customer/generateToken";
-import { db } from "@/config/Firebase.database";
-import { env } from "@/config/env";
+import { CustomerModel } from "@/models/Customer.model.ts";
+import { generateToken } from "@/services/customer/generateToken.ts";
+import { db } from "@/config/Firebase.database.ts";
+import { env } from "@/config/env.ts";
 
 export async function getAuthTokenController(
   req: Request,

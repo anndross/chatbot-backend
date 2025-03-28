@@ -1,4 +1,4 @@
-import { VtexProductToAdd } from "@/types/third-parties/vtex/add-to-cart";
+import { VtexProductToAdd } from "@/types/third-parties/vtex/add-to-cart.ts";
 import axios from "axios";
 
 export async function addToCart(

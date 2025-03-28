@@ -1,8 +1,8 @@
 import express from "express";
-import { InitMiddlewares } from "@/middlewares";
-import { InitRoutes } from "@/routes";
-import { errorHandler } from "./middlewares/ErrorHandler.middleware";
-import { env } from "./config/env";
+import { InitMiddlewares } from "@/middlewares/index.ts";
+import { InitRoutes } from "@/routes/index.ts";
+import { errorHandler } from "./middlewares/ErrorHandler.middleware.ts";
+import { env } from "./config/env.ts";
 
 const app = express();
 

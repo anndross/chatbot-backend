@@ -1,8 +1,8 @@
-import { AuthRequest } from "@/middlewares/Auth.middleware";
-import { thirdParties } from "@/third-parties";
-import { SupportedPlatforms } from "@/types/third-parties/supported-platforms";
+import { AuthRequest } from "@/middlewares/Auth.middleware.ts";
+import { thirdParties } from "@/third-parties/index.ts";
+import { SupportedPlatforms } from "@/types/third-parties/supported-platforms.ts";
 import { Request, Response } from "express";
-import { getHostName } from "@/utils/getHostName";
+import { getHostName } from "@/utils/getHostName.ts";
 
 type RecommendedProductsControllerBody = {
   recommendedProductsIds: string[];

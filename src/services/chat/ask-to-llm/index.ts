@@ -2,8 +2,8 @@ import { OpenAIEmbeddings } from "@langchain/openai";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { OpenAI } from "openai";
 import { Stream } from "openai/streaming.mjs";
-import { getMappedMessageToLLMConfig } from "@/services/chat/ask-to-llm/mappedMessageToLLMConfig";
-import { answerSchema } from "@/services/chat/ask-to-llm/answerSchema";
+import { getMappedMessageToLLMConfig } from "@/services/chat/ask-to-llm/mappedMessageToLLMConfig.ts";
+import { answerSchema } from "@/services/chat/ask-to-llm/answerSchema.ts";
 import dotenv from "dotenv";
 
 dotenv.config();

@@ -1,6 +1,6 @@
-import { VtexProductToAdd } from "./vtex/add-to-cart";
-import { VtexProductBySlug } from "./vtex/product-by-slug";
-import { VtexRecommendedProducts } from "./vtex/recommended-products";
+import { VtexProductToAdd } from "./vtex/add-to-cart.ts";
+import { VtexProductBySlug } from "./vtex/product-by-slug.ts";
+import { VtexRecommendedProducts } from "./vtex/recommended-products.ts";
 
 export type SupportedMethods = {
   addToCart: (

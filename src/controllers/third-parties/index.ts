@@ -1,2 +1,2 @@
-export { getRecommendedProductsController } from "@/controllers/third-parties/GetRecommendedProducts.controller";
-export { minicartAddProductController } from "@/controllers/third-parties/MinicartAddProduct.controller";
+export { getRecommendedProductsController } from "@/controllers/third-parties/GetRecommendedProducts.controller.ts";
+export { minicartAddProductController } from "@/controllers/third-parties/MinicartAddProduct.controller.ts";

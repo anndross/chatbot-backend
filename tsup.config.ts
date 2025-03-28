@@ -15,6 +15,7 @@ export default defineConfig({
     }),
   ],
   esbuildOptions(options) {
-    options.outExtension = { ".js": ".js" }; // Mantém as extensões como .js
+    options.conditions = ["module", "import", "require"];
+    options.outExtension = { ".js": ".js" }; // Adiciona extensões apenas na build
   },
 });

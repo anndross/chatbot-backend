@@ -1,6 +1,4 @@
 {
-  "$schema": "https://json.schemastore.org/tsconfig",
-  "_version": "18.2.0",
   "compilerOptions": {
     "lib": ["es2023"],
     "module": "NodeNext",
@@ -14,6 +12,9 @@
       "@/*": ["src/*"]
     },
     "allowJs": true,
+    "resolveJsonModule": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
     "outDir": "dist"
   }
 }

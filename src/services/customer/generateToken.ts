@@ -1,4 +1,4 @@
-import { Customer } from "@/types/customer";
+import { Customer } from "@/types/customer.ts";
 import jwt from "jsonwebtoken";
 
 export function generateToken(payload: Customer): string | null {

@@ -1,4 +1,4 @@
-import { VtexRecommendedProducts } from "@/types/third-parties/vtex/recommended-products";
+import { VtexRecommendedProducts } from "@/types/third-parties/vtex/recommended-products.ts";
 import axios from "axios";
 
 export async function getRecommendedProducts(

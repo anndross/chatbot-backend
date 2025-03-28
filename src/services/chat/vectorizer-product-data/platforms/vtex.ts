@@ -1,9 +1,9 @@
-import { getProductDataBySlug } from "@/third-parties/vtex/getProductDataBySlug";
+import { getProductDataBySlug } from "@/third-parties/vtex/getProductDataBySlug.ts";
 import {
   Installment,
   ProductItem,
   VtexProductBySlug,
-} from "@/types/third-parties/vtex/product-by-slug";
+} from "@/types/third-parties/vtex/product-by-slug.ts";
 
 export async function vtexVectorProductData(store: string, slug: string) {
   try {

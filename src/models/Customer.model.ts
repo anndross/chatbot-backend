@@ -1,4 +1,4 @@
-import { Customer } from "@/types/customer";
+import { Customer } from "@/types/customer.ts";
 
 export class CustomerModel {
   private db: any;

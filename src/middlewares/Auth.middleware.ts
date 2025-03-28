@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
-import { Customer } from "@/types/customer";
+import { Customer } from "@/types/customer.ts";
 
 export interface AuthRequest extends Request {
   customer?: Customer;

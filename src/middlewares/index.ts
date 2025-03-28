@@ -1,7 +1,7 @@
 import express from "express";
-import { corsMiddleware } from "@/middlewares/Cors.middleware";
-import { rateLimiterMiddleware } from "@/middlewares/RateLimiter.middleware";
-import { requestTimeoutMiddleware } from "@/middlewares/RequestTimeout.middleware";
+import { corsMiddleware } from "@/middlewares/Cors.middleware.ts";
+import { rateLimiterMiddleware } from "@/middlewares/RateLimiter.middleware.ts";
+import { requestTimeoutMiddleware } from "@/middlewares/RequestTimeout.middleware.ts";
 
 export function InitMiddlewares(app: express.Application) {
   app.use(corsMiddleware);

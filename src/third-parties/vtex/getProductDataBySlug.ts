@@ -1,4 +1,4 @@
-import { VtexProductBySlug } from "@/types/third-parties/vtex/product-by-slug";
+import { VtexProductBySlug } from "@/types/third-parties/vtex/product-by-slug.ts";
 import axios from "axios";
 
 export async function getProductDataBySlug(

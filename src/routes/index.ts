@@ -1,8 +1,8 @@
 import { Application } from "express";
 
-import chatRouter from "@/routes/Chat.routes";
-import customerRouter from "@/routes/Customer.routes";
-import thirdPartiesRouter from "@/routes/ThirdParties.routes";
+import chatRouter from "@/routes/Chat.routes.ts";
+import customerRouter from "@/routes/Customer.routes.ts";
+import thirdPartiesRouter from "@/routes/ThirdParties.routes.ts";
 
 export function InitRoutes(app: Application) {
   // rotas do chat

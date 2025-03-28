@@ -2,8 +2,8 @@ import { Router } from "express";
 import {
   getRecommendedProductsController,
   minicartAddProductController,
-} from "@/controllers/third-parties";
-import { authMiddleware } from "@/middlewares/Auth.middleware";
+} from "@/controllers/third-parties/index.ts";
+import { authMiddleware } from "@/middlewares/Auth.middleware.ts";
 
 const router = Router();
 
