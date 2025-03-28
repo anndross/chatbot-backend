@@ -1,9 +1,8 @@
 import { AuthRequest } from "@/middlewares/Auth.middleware";
 import { thirdParties } from "@/third-parties";
-import { ControllerResponse } from "@/types/controller-response";
-import { VtexRecommendedProducts } from "@/types/third-parties/vtex/recommended-products";
 import { SupportedPlatforms } from "@/types/third-parties/supported-platforms";
 import { Request, Response } from "express";
+import { getHostName } from "@/utils/getHostName";
 
 type RecommendedProductsControllerBody = {
   recommendedProductsIds: string[];
@@ -11,35 +10,32 @@ type RecommendedProductsControllerBody = {
   platformName: SupportedPlatforms;
 };
 
-type RecommendedProductsControllerData = {
-  data: VtexRecommendedProducts;
-};
-
 export const getRecommendedProductsController = async (
   req: Request,
   res: Response
-): Promise<Response> => {
+): Promise<void> => {
   const { recommendedProductsIds } =
     req.body as RecommendedProductsControllerBody;
 
-  const { platformName, name: store } = (req as AuthRequest)?.customer || {};
+  const { platformName, hostname } = (req as AuthRequest)?.customer || {};
 
   if (!recommendedProductsIds || !recommendedProductsIds.length) {
-    return res
+    res
       .status(400)
       .json({ error: "É necessário que os IDs sejam fornecidos." });
+    return;
   }
 
   if (!platformName) {
-    return res
+    res
       .status(400)
       .json({ error: "O cliente não tem uma plataforma cadastrada." });
+    return;
   }
 
-  if (!store) {
-    return res
-      .status(400)
-      .json({ error: "O cliente não tem uma loja cadastrada." });
+  if (!hostname) {
+    res.status(400).json({ error: "O cliente não tem uma loja cadastrada." });
+    return;
   }
 
   try {
@@ -47,15 +43,15 @@ export const getRecommendedProductsController = async (
 
     const products = await platformMethods.getRecommendedProducts(
       recommendedProductsIds,
-      store
+      getHostName(hostname)
     );
 
     if (!products || products.length === 0)
       throw new Error("Produtos não encontrados");
 
-    return res.json({ data: products });
+    res.json({ data: products });
   } catch (error) {
     console.error(error);
-    return res.status(400).json({ error: "Produtos não encontrados" });
+    res.status(400).json({ error: "Produtos não encontrados" });
   }
 };

@@ -2,20 +2,22 @@ import { Request, Response, NextFunction } from "express";
 import { CustomerModel } from "@/models/Customer.model";
 import { generateToken } from "@/services/customer/generateToken";
 import { db } from "@/config/Firebase.database";
+import { env } from "@/config/env";
 
 export async function getAuthTokenController(
   req: Request,
   res: Response,
   _next: NextFunction
-): Promise<Response> {
-  const customerHost = req.get("origin");
+): Promise<void> {
+  const customerHost = env.isDevelopment ? env.customerHost : req.get("origin");
 
   const customerModel = new CustomerModel(db);
 
   const customer = await customerModel.getCustomerByHost(customerHost || "");
 
   if (!customer) {
-    return res.status(401).json({ error: "Cliente não encontrado" });
+    res.status(401).json({ error: "Cliente não encontrado" });
+    return;
   }
 
   if (customer.paymentStatus === "paid") {
@@ -23,8 +25,9 @@ export async function getAuthTokenController(
 
     const token = generateToken(payload);
 
-    return res.status(200).json({ access_token: token });
+    res.status(200).json({ access_token: token });
+    return;
   }
 
-  return res.status(401).json({ error: "Cliente não pagante." });
+  res.status(401).json({ error: "Cliente não pagante." });
 }

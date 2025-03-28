@@ -4,36 +4,49 @@ import { AuthRequest } from "@/middlewares/Auth.middleware";
 import { sendAnswerToSheets } from "@/services/chat/sendAnswerToSheets";
 import { AskToLLM } from "@/services/chat/ask-to-llm";
 import { getProductDataAsVector } from "@/services/chat/vectorizer-product-data";
-import { sendOnlyTheAnswerChunkToClient } from "@/services/chat/sendOnlyTheAnswerChunkToClient";
+import { env } from "@/config/env";
+import { getHostName } from "@/utils/getHostName";
 
-export async function chatController(req: Request, res: Response) {
+export async function chatController(
+  req: Request,
+  res: Response
+): Promise<void> {
   const { question, conversationId } = req.body;
 
-  const { pathname } = new URL(req.url);
+  const origin = req.headers?.origin;
+  const { pathname } = origin ? new URL(origin) : {};
 
-  const { name, platformName } = (req as AuthRequest).customer || {};
+  const slug =
+    (env.isDevelopment ? env.customerSlug : pathname?.replace("/", "")) || "";
+
+  const { name, hostname, platformName } = (req as AuthRequest).customer || {};
 
   if (!platformName) {
-    return res
+    res
       .status(500)
       .json({ error: "O cliente não tem uma plataforma definida." });
+    return;
   }
 
-  if (!name) {
-    return res
-      .status(500)
-      .json({ error: "O cliente não tem um nome definido." });
+  if (!hostname) {
+    res.status(500).json({ error: "O cliente não tem um hostname definido." });
+    return;
   }
 
   if (!conversationId || !question) {
-    return res.status(400).json({
+    res.status(400).json({
       error: "É necessário passar todos os dados (question e conversationId).",
     });
+    return;
   }
 
   try {
     const productDataAsVector =
-      (await getProductDataAsVector(platformName, name, pathname)) || [];
+      (await getProductDataAsVector(
+        platformName,
+        getHostName(hostname),
+        slug
+      )) || [];
 
     const askToLLM = new AskToLLM(
       question,
@@ -48,18 +61,34 @@ export async function chatController(req: Request, res: Response) {
     let textStore = ""; // Armazena o buffer completo em string
 
     for await (const chunk of streamAnswer) {
-      sendOnlyTheAnswerChunkToClient(chunk, textStore, res);
+      const chunkContent = chunk.choices[0]?.delta?.content;
+
+      textStore += chunkContent || "";
+
+      const rgxToGetOnlyFinalResponseContent = new RegExp(
+        /"answer"\s*:\s*"\w*/
+      );
+
+      const isFinalResponse = textStore.match(rgxToGetOnlyFinalResponseContent);
+
+      const isEndOfResponse = textStore.match(/",/);
+
+      if (isFinalResponse && !isEndOfResponse) {
+        res.write(
+          chunkContent?.replace('":"', "").replace(/\n/g, "<br/>") || ""
+        );
+      }
     }
 
     // Envia a resposta para o cliente após estar completa.
     // Envia o json com as actions.
     res.write(textStore);
 
-    sendAnswerToSheets(name, question, textStore);
+    sendAnswerToSheets(name || hostname, question, textStore);
 
     res.end();
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Ocorreu um erro interno" });
+    res.status(500).json({ error: "Ocorreu um erro interno" });
   }
 }

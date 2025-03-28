@@ -13,11 +13,7 @@ export const answerSchema = {
     recommended_products: {
       type: "array",
       items: {
-        type: "object",
-        properties: {
-          id: { type: "string" },
-        },
-        required: ["id"],
+        type: "string",
         additionalProperties: false, // 🚀 Evita erros de schema inválido
       },
     },
@@ -27,21 +23,21 @@ export const answerSchema = {
 };
 
 export const errorResponse = {
-  answer:
+  final_response:
     "Desculpe, não conseguir obter sua resposta no momento, sera que você pode tentar mais tarde?.",
   actions: [],
   recommended_products: [],
 };
 
 export const notReleatedResponse = {
-  answer:
+  final_response:
     "Ops! Não achei essa informação, mas posso tentar responder outra pergunta sobre o produto.",
   actions: [],
   recommended_products: [],
 };
 
 export interface ResponseSchema {
-  answer: string;
+  final_response: string;
   actions: string[];
   recommended_products: {
     id: string;

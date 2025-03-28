@@ -10,9 +10,7 @@ export function sendOnlyTheAnswerChunkToClient(
 
   textStore += chunkContent || "";
 
-  const rgxToGetOnlyFinalResponseContent = new RegExp(
-    /"final_response"\s*:\s*"\w*/
-  );
+  const rgxToGetOnlyFinalResponseContent = new RegExp(/"answer"\s*:\s*"\w*/);
 
   const isFinalResponse = textStore.match(rgxToGetOnlyFinalResponseContent);
 

@@ -4,6 +4,9 @@ import { OpenAI } from "openai";
 import { Stream } from "openai/streaming.mjs";
 import { getMappedMessageToLLMConfig } from "@/services/chat/ask-to-llm/mappedMessageToLLMConfig";
 import { answerSchema } from "@/services/chat/ask-to-llm/answerSchema";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
@@ -99,7 +102,7 @@ export class AskToLLM {
     const conversationHistory: Message[] = this.conversation;
 
     const meaningFullInfo = await this.getMeaningfulInfosToQuestion();
-
+    console.log("meaningFullInfo", meaningFullInfo);
     const messages: Message[] = [
       getMappedMessageToLLMConfig(meaningFullInfo),
       ...conversationHistory,
