@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node -r tsconfig-paths/register dist/app.cjs",
     "start:dev": "tsx watch --tsconfig tsconfig.json src/app.ts",
+    "postinstall": "npm install --save-dev @types/express",
     "jwt": "tsx src/scripts/utils/generateJWT.ts",
     "build": "tsup"
   },
