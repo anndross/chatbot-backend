@@ -5,6 +5,10 @@ import { sendAnswerToSheets } from "@/services/chat/sendAnswerToSheets.ts";
 import { AskToLLM } from "@/services/chat/ask-to-llm/index.ts";
 import { getProductDataAsVector } from "@/services/chat/vectorizer-product-data/index.ts";
 import { getHostName } from "@/utils/getHostName.ts";
+import {
+  cacheProductData,
+  getCachedProductData,
+} from "@/services/chat/vectorizer-product-data/cache";
 
 export async function chatController(
   req: Request,
@@ -34,12 +38,22 @@ export async function chatController(
   }
 
   try {
-    const productDataAsVector =
-      (await getProductDataAsVector(
-        platformName,
-        getHostName(hostname),
-        slug
-      )) || [];
+    const hostName = getHostName(hostname);
+
+    const cacheProductDataKey = `${platformName}-${hostName}-${slug}`;
+
+    const cachedProductData = await getCachedProductData(cacheProductDataKey);
+
+    let productDataAsVector: string[] = [];
+
+    if (!cachedProductData) {
+      productDataAsVector =
+        (await getProductDataAsVector(platformName, hostName, slug)) || [];
+
+      await cacheProductData(cacheProductDataKey, productDataAsVector);
+    } else {
+      productDataAsVector = cachedProductData;
+    }
 
     const askToLLM = new AskToLLM(
       question,

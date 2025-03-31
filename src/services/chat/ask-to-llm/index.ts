@@ -103,7 +103,7 @@ export class AskToLLM {
     const conversationHistory: Message[] = this.conversation;
 
     const meaningFullInfo = await this.getMeaningfulInfosToQuestion();
-    console.log("meaningFullInfo", meaningFullInfo);
+
     const messages: Message[] = [
       getMappedMessageToLLMConfig(meaningFullInfo),
       ...conversationHistory,
