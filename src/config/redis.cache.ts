@@ -1,7 +1,8 @@
 import { createClient } from "redis";
+import { env } from "@/config/env";
 
 const client = createClient({
-  url: "rediss://default:AajOAAIjcDFkNjIwYjFhOTliMzg0ZTFkYmU0MzkwZWU5N2Y0MzdjZnAxMA@thorough-chimp-43214.upstash.io:6379",
+  url: env.REDIS_URL,
 });
 
 client.on("error", function (err) {
