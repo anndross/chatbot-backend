@@ -4,11 +4,9 @@ import { OpenAI } from "openai";
 import { Stream } from "openai/streaming.mjs";
 import { getMappedMessageToLLMConfig } from "@/services/chat/ask-to-llm/mappedMessageToLLMConfig.ts";
 import { answerSchema } from "@/services/chat/ask-to-llm/answerSchema.ts";
-import dotenv from "dotenv";
+import { env } from "@/config/env";
 
-dotenv.config();
-
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const openai = new OpenAI({ apiKey: env.OPENAI_KEY });
 
 type ConversationHistory = {
   [key: string]: Message[];
@@ -33,7 +31,7 @@ export class AskToLLM {
 
     this.openAiEmbeddings = new OpenAIEmbeddings({
       modelName: "text-embedding-3-large",
-      openAIApiKey: process.env.OPENAI_API_KEY as string,
+      openAIApiKey: env.OPENAI_KEY as string,
     });
 
     this.vectorStore = new MemoryVectorStore(this.openAiEmbeddings);

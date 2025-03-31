@@ -20,6 +20,7 @@ export async function vtexVectorProductData(store: string, slug: string) {
     return null;
   }
 }
+
 function vectorizeVtexProductData(
   data: VtexProductBySlug,
   maxLength: number = 20000
