@@ -17,7 +17,7 @@ export const getRecommendedProductsController = async (
   const { recommendedProductsIds } =
     req.body as RecommendedProductsControllerBody;
 
-  const { platformName, hostname } = (req as AuthRequest)?.customer || {};
+  const { platformName, host } = (req as AuthRequest)?.customer || {};
 
   if (!recommendedProductsIds || !recommendedProductsIds.length) {
     res
@@ -33,7 +33,7 @@ export const getRecommendedProductsController = async (
     return;
   }
 
-  if (!hostname) {
+  if (!host) {
     res.status(400).json({ error: "O cliente não tem uma loja cadastrada." });
     return;
   }
@@ -43,7 +43,7 @@ export const getRecommendedProductsController = async (
 
     const products = await platformMethods.getRecommendedProducts(
       recommendedProductsIds,
-      getHostName(hostname)
+      getHostName(host)
     );
 
     if (!products || products.length === 0)

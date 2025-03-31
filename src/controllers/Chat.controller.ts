@@ -16,7 +16,7 @@ export async function chatController(
 ): Promise<void> {
   const { question, conversationId, slug } = req.body;
 
-  const { name, hostname, platformName } = (req as AuthRequest).customer || {};
+  const { name, host, platformName } = (req as AuthRequest).customer || {};
 
   if (!platformName) {
     res
@@ -25,8 +25,8 @@ export async function chatController(
     return;
   }
 
-  if (!hostname) {
-    res.status(500).json({ error: "O cliente não tem um hostname definido." });
+  if (!host) {
+    res.status(500).json({ error: "O cliente não tem um host definido." });
     return;
   }
 
@@ -38,7 +38,7 @@ export async function chatController(
   }
 
   try {
-    const hostName = getHostName(hostname);
+    const hostName = getHostName(host);
 
     const cacheProductDataKey = `${platformName}-${hostName}-${slug}`;
 
@@ -91,7 +91,7 @@ export async function chatController(
     // Envia o json com as actions.
     res.write(textStore);
 
-    sendAnswerToSheets(name || hostname, question, textStore);
+    sendAnswerToSheets(name || host, question, textStore);
 
     res.end();
   } catch (error) {

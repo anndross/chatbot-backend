@@ -16,7 +16,7 @@ export const minicartAddProductController = async (
 ): Promise<void> => {
   const { product, orderFormId } = req.body as MinicartAddProductControllerBody;
 
-  const { hostname, platformName } = (req as AuthRequest).customer || {};
+  const { host, platformName } = (req as AuthRequest).customer || {};
 
   if (!product || orderFormId?.length) {
     res.status(400).json({
@@ -33,7 +33,7 @@ export const minicartAddProductController = async (
     return;
   }
 
-  if (!hostname) {
+  if (!host) {
     res.status(400).json({ error: "O cliente não tem uma loja cadastrada." });
     return;
   }
@@ -44,7 +44,7 @@ export const minicartAddProductController = async (
     const wasAdded = await platformMethods.addToCart(
       product,
       orderFormId,
-      getHostName(hostname)
+      getHostName(host)
     );
 
     if (!wasAdded) throw new Error("Produto não adicionado.");

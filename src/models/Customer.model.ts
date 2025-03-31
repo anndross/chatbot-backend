@@ -11,7 +11,7 @@ export class CustomerModel {
     try {
       const querySnapshot = await this.db
         .collection("users")
-        .where("hostname", "==", host)
+        .where("host", "==", host)
         .get();
 
       const getFirstCustomerData = (snapshot: any) =>
