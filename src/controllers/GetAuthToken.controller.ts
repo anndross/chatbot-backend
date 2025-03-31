@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { CustomerModel } from "@/models/Customer.model.ts";
 import { generateToken } from "@/services/customer/generateToken.ts";
-import { db } from "@/config/Firebase.database.ts";
+import { db } from "@/config/firebase.database";
 import { env } from "@/config/env.ts";
 
 export async function getAuthTokenController(
@@ -9,7 +9,9 @@ export async function getAuthTokenController(
   res: Response,
   _next: NextFunction
 ): Promise<void> {
-  const customerHost = env.isDevelopment ? env.customerHost : req.get("origin");
+  const customerHost = env.IS_DEVELOPMENT
+    ? env.CUSTOMER_HOST
+    : req.get("origin");
 
   const customerModel = new CustomerModel(db);
 

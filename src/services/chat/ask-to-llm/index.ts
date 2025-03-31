@@ -29,8 +29,6 @@ export class AskToLLM {
     this.conversationId = conversationId;
     this.productData = productData;
 
-    console.log("Informações do produto na classe do chat", productData);
-
     this.conversationHistory = {};
 
     this.openAiEmbeddings = new OpenAIEmbeddings({
