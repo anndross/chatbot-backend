@@ -9,7 +9,6 @@ export const env = {
   OPENAI_KEY: process.env.OPENAI_API_KEY,
   OPENROUTER_KEY: process.env.OPENROUTER_API_KEY,
   GEMINI_KEY: process.env.GEMINI_API_KEY,
-  VTEX_ACCOUNT_NAME: process.env.VTEX_ACCOUNT_NAME,
   PORT: 3000,
   // FIREBASE CONFIG
   FIREBASE_TYPE: process.env.FIREBASE_TYPE,

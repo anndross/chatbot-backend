@@ -49,7 +49,7 @@ export const getRecommendedProductsController = async (
     if (!products || products.length === 0)
       throw new Error("Produtos não encontrados");
 
-    res.json({ data: products });
+    res.status(200).json({ data: products });
   } catch (error) {
     console.error(error);
     res.status(400).json({ error: "Produtos não encontrados" });

@@ -9,27 +9,32 @@ export async function getAuthTokenController(
   res: Response,
   _next: NextFunction
 ): Promise<void> {
-  const customerHost = env.IS_DEVELOPMENT
-    ? env.CUSTOMER_HOST
-    : req.get("origin");
+  try {
+    const customerHost = env.IS_DEVELOPMENT
+      ? env.CUSTOMER_HOST
+      : req.get("origin");
 
-  const customerModel = new CustomerModel(db);
+    const customerModel = new CustomerModel(db);
 
-  const customer = await customerModel.getCustomerByHost(customerHost || "");
+    const customer = await customerModel.getCustomerByHost(customerHost || "");
 
-  if (!customer) {
-    res.status(401).json({ error: "Cliente não encontrado" });
-    return;
+    if (!customer) {
+      res.status(401).json({ error: "Cliente não encontrado" });
+      return;
+    }
+
+    if (customer.paymentStatus === "paid") {
+      const payload = customer;
+
+      const token = generateToken(payload);
+
+      res.status(200).json({ access_token: token });
+      return;
+    }
+
+    res.status(401).json({ error: "Cliente não pagante." });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Ocorreu um erro interno no servidor." });
   }
-
-  if (customer.paymentStatus === "paid") {
-    const payload = customer;
-
-    const token = generateToken(payload);
-
-    res.status(200).json({ access_token: token });
-    return;
-  }
-
-  res.status(401).json({ error: "Cliente não pagante." });
 }

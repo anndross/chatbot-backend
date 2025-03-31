@@ -1,16 +1,16 @@
 import express from "express";
 import { InitMiddlewares } from "@/middlewares/index.ts";
 import { InitRoutes } from "@/routes/index.ts";
-import { errorHandler } from "./middlewares/ErrorHandler.middleware.ts";
 import { env } from "@/config/env.ts";
+import { InitSwagger } from "@/config/swagger.doc.ts";
 
 const app = express();
+
+InitSwagger(app);
 
 InitMiddlewares(app);
 
 InitRoutes(app);
-
-app.use(errorHandler);
 
 const PORT = env.PORT || 3000;
 

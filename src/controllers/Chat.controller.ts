@@ -20,19 +20,20 @@ export async function chatController(
 
   if (!platformName) {
     res
-      .status(500)
+      .status(400)
       .json({ error: "O cliente não tem uma plataforma definida." });
     return;
   }
 
   if (!host) {
-    res.status(500).json({ error: "O cliente não tem um host definido." });
+    res.status(400).json({ error: "O cliente não tem um host definido." });
     return;
   }
 
   if (!conversationId || !question) {
     res.status(400).json({
-      error: "É necessário passar todos os dados (question e conversationId).",
+      error:
+        "É necessário passar todos os dados (slug, question e conversationId).",
     });
     return;
   }
@@ -81,15 +82,17 @@ export async function chatController(
       const isEndOfResponse = textStore.match(/",/);
 
       if (isFinalResponse && !isEndOfResponse) {
-        res.write(
-          chunkContent?.replace('":"', "").replace(/\n/g, "<br/>") || ""
-        );
+        res
+          .status(200)
+          .write(
+            chunkContent?.replace('":"', "").replace(/\n/g, "<br/>") || ""
+          );
       }
     }
 
     // Envia a resposta para o cliente após estar completa.
     // Envia o json com as actions.
-    res.write(textStore);
+    res.status(200).write(textStore);
 
     sendAnswerToSheets(name || host, question, textStore);
 
