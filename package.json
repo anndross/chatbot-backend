@@ -7,7 +7,8 @@
     "start": "node -r tsconfig-paths/register dist/app.cjs",
     "dev": "tsx watch --tsconfig tsconfig.json src/app.ts",
     "jwt": "tsx src/scripts/utils/generateJWT.ts",
-    "build": "tsup"
+    "build": "tsup",
+    "prepare": "husky"
   },
   "type": "commonjs",
   "keywords": [],
@@ -47,6 +48,7 @@
     "@types/express": "^5.0.1",
     "@types/jsonwebtoken": "^9.0.9",
     "@types/node": "^22.13.4",
+    "husky": "^9.1.7",
     "nodemon": "^3.1.9",
     "tsx": "^4.19.3",
     "typescript": "^5.8.2"
