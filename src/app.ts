@@ -6,7 +6,7 @@ import { InitSwagger } from "@/config/swagger.doc.ts";
 
 const app = express();
 
-if (env.IS_DEVELOPMENT) InitSwagger(app);
+InitSwagger(app);
 
 InitMiddlewares(app);
 
