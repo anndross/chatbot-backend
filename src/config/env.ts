@@ -5,7 +5,6 @@ dotenv.config();
 export const env = {
   IS_DEVELOPMENT: process.env.NODE_ENV === "development",
   CUSTOMER_HOST: process.env.CUSTOMER_HOST,
-  CUSTOMER_SLUG: process.env.CUSTOMER_SLUG,
   OPENAI_KEY: process.env.OPENAI_API_KEY,
   OPENROUTER_KEY: process.env.OPENROUTER_API_KEY,
   GEMINI_KEY: process.env.GEMINI_API_KEY,

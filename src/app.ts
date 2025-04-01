@@ -2,7 +2,7 @@ import express from "express";
 import { InitMiddlewares } from "@/middlewares/index.ts";
 import { InitRoutes } from "@/routes/index.ts";
 import { env } from "@/config/env.ts";
-import { InitSwagger } from "@/config/swagger.doc.ts";
+import { InitSwagger } from "@/config/swagger.docs";
 
 const app = express();
 

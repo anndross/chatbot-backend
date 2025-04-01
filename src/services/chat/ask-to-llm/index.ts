@@ -5,6 +5,13 @@ import { Stream } from "openai/streaming.mjs";
 import { getMappedMessageToLLMConfig } from "@/services/chat/ask-to-llm/mappedMessageToLLMConfig.ts";
 import { answerSchema } from "@/services/chat/ask-to-llm/answerSchema.ts";
 import { env } from "@/config/env";
+import { addColors } from "winston/lib/winston/config";
+import { access } from "fs";
+import {
+  createIncrementalCompilerHost,
+  isAutoAccessorPropertyDeclaration,
+} from "typescript";
+import { AsyncLocalStorage } from "async_hooks";
 
 const openai = new OpenAI({ apiKey: env.OPENAI_KEY });
 
@@ -14,7 +21,7 @@ type ConversationHistory = {
 
 type Message = { role: "user" | "system"; content: string };
 
-export class AskToLLM {
+export class AskToLLMService {
   private question: string;
   private conversationId: string;
   private productData: string[];
@@ -73,7 +80,7 @@ export class AskToLLM {
     );
   }
 
-  private async getMeaningfulInfosToQuestion(): Promise<string> {
+  private async getMeaningfulInfoToQuestion(): Promise<string> {
     await this.embeddingProductData();
 
     const meaningFullInfo: string = await this.searchRelevantInfoToQuestion();
@@ -100,7 +107,7 @@ export class AskToLLM {
 
     const conversationHistory: Message[] = this.conversation;
 
-    const meaningFullInfo = await this.getMeaningfulInfosToQuestion();
+    const meaningFullInfo = await this.getMeaningfulInfoToQuestion();
 
     const messages: Message[] = [
       getMappedMessageToLLMConfig(meaningFullInfo),

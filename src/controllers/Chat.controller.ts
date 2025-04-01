@@ -2,13 +2,13 @@ import { Request, Response } from "express";
 
 import { AuthRequest } from "@/middlewares/Auth.middleware.ts";
 import { sendAnswerToSheets } from "@/services/chat/sendAnswerToSheets.ts";
-import { AskToLLM } from "@/services/chat/ask-to-llm/index.ts";
+import { AskToLLMService } from "@/services/chat/ask-to-llm/index.ts";
 import { getProductDataAsVector } from "@/services/chat/vectorizer-product-data/index.ts";
 import { getHostName } from "@/utils/getHostName.ts";
 import {
   cacheProductData,
   getCachedProductData,
-} from "@/services/chat/vectorizer-product-data/cache";
+} from "@/services/chat/vectorizer-product-data/utils/cache";
 
 export async function chatController(
   req: Request,
@@ -56,7 +56,7 @@ export async function chatController(
       productDataAsVector = cachedProductData;
     }
 
-    const askToLLM = new AskToLLM(
+    const askToLLM = new AskToLLMService(
       question,
       conversationId,
       productDataAsVector

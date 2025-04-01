@@ -8,8 +8,8 @@ const router = Router();
  * @swagger
  * /api/chat:
  *   post:
- *     summary: Retorna a resposta do chatbot por stream com base em uma **pergunta** e o **slug** da página do produto.
- *     description: O **host** utilizado para fazer a consulta do **slug** no modo de desenvolvimento está definido no arquivo **.env**, **CUSTOMER_HOST**.
+ *     summary: Retorna a resposta do chatbot por stream com base em uma pergunta e o slug da página do produto.
+ *     description: O host utilizado para fazer a consulta do slug no modo de desenvolvimento está definido no arquivo .env, CUSTOMER_HOST.
  *     tags:
  *       - Chat
  *     security:
