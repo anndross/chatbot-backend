@@ -21,6 +21,15 @@ export class CustomerModel {
         return getFirstCustomerData(querySnapshot);
       }
 
+      const querySnapshotForDev = await this.db
+        .collection("users")
+        .where("host_workspace", "==", host)
+        .get();
+
+      if (!querySnapshotForDev.empty) {
+        return getFirstCustomerData(querySnapshotForDev);
+      }
+
       throw new Error("Cliente não encontrado.");
     } catch (error) {
       console.error(error);
