@@ -11,11 +11,11 @@ const router = Router();
  * @swagger
  * /api/recommended-products:
  *   post:
- *     summary: Retorna o token de acesso para a página que conter o origin autorizado (validação por cors e pelo banco).
+ *     summary: Retorna os produtos recomendados com base no histórico do usuário.
  *     tags:
  *       - Terceiros
  *     security:
- *       - AuthToken: [] # Faz referência ao esquema "AuthToken"
+ *       - AuthToken: []
  *     requestBody:
  *       required: true
  *       content:
@@ -25,10 +25,9 @@ const router = Router();
  *             items:
  *               type: string
  *               example: "1234"
- *
  *     responses:
  *       200:
- *         description: Retorna os produtos.
+ *         description: Retorna a lista de produtos recomendados.
  *         content:
  *           application/json:
  *              schema:
@@ -59,26 +58,6 @@ const router = Router();
  *                    link: "http://loja.com/produto"
  *                    sellerId: "seller123"
  *       400:
- *         description: É necessário que os IDs sejam fornecidos.
- *         content:
- *           application/json:
- *              schema:
- *                type: object
- *                properties:
- *                  error:
- *                    type: string
- *                    example: É necessário que os IDs sejam fornecidos.
- *      400:
- *         description: O cliente não tem uma plataforma cadastrada.
- *         content:
- *           application/json:
- *              schema:
- *                type: object
- *                properties:
- *                  error:
- *                    type: string
- *                    example: O cliente não tem uma plataforma cadastrada.
- *      400:
  *         description: O cliente não tem uma loja cadastrada.
  *         content:
  *           application/json:
@@ -87,17 +66,7 @@ const router = Router();
  *                properties:
  *                  error:
  *                    type: string
- *                    example: O cliente não tem uma loja cadastrada.
- *       401:
- *         description: O token de autorização é obrigatório.
- *         content:
- *           application/json:
- *              schema:
- *                type: object
- *                properties:
- *                  error:
- *                    type: string
- *                    example: O token de autorização é obrigatório.
+ *                    example: "O cliente não tem uma loja cadastrada."
  *       401:
  *         description: Token inválido.
  *         content:
@@ -107,7 +76,7 @@ const router = Router();
  *                properties:
  *                  error:
  *                    type: string
- *                    example: Token inválido.
+ *                    example: "Token inválido."
  *       500:
  *         description: Erro interno do servidor.
  *         content:
@@ -117,7 +86,7 @@ const router = Router();
  *                properties:
  *                  error:
  *                    type: string
- *                    example: Ocorreu um erro interno.
+ *                    example: "Ocorreu um erro interno."
  */
 router.post(
   "/recommended-products",
@@ -129,12 +98,12 @@ router.post(
  * @swagger
  * /api/minicart/add-product:
  *   post:
- *     summary: Retorna o token de acesso para a página que conter o origin autorizado (validação por cors e pelo banco).
+ *     summary: Adiciona um produto ao minicart.
  *     tags:
  *       - Terceiros
  *     security:
- *       - AuthToken: [] # Faz referência ao esquema "AuthToken"
- *    requestBody:
+ *       - AuthToken: []
+ *     requestBody:
  *       required: true
  *       content:
  *         application/json:
@@ -161,7 +130,7 @@ router.post(
  *                 example: "1"
  *     responses:
  *       200:
- *         description: Retorna sucesso.
+ *         description: Produto adicionado com sucesso ao minicart.
  *         content:
  *           application/json:
  *              schema:
@@ -170,7 +139,18 @@ router.post(
  *                  success:
  *                    type: boolean
  *                    example: true
+ *       400:
+ *         description: Dados inválidos ou IDs não fornecidos.
+ *         content:
+ *           application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  error:
+ *                    type: string
+ *                    example: "É necessário fornecer os IDs corretos."
  *       401:
+ *         description: Token de autorização ausente ou inválido.
  *         content:
  *           application/json:
  *              schema:
@@ -178,10 +158,9 @@ router.post(
  *                properties:
  *                  error:
  *                    type: string
- *                    example: Cliente não encontrado
- *         description: Cliente não encontrado ou cliente não pagante.
+ *                    example: "O token de autorização é obrigatório."
  *       500:
- *         description: Produto não adicionado.
+ *         description: Erro ao adicionar o produto.
  *         content:
  *           application/json:
  *              schema:
@@ -189,7 +168,7 @@ router.post(
  *                properties:
  *                  error:
  *                    type: string
- *                    example: Produto não adicionado.
+ *                    example: "Produto não adicionado devido a um erro interno."
  */
 router.post(
   "/minicart/add-product",
