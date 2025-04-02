@@ -6,8 +6,7 @@ import { env } from "@/config/env.ts";
 
 export async function getAuthTokenController(
   req: Request,
-  res: Response,
-  _next: NextFunction
+  res: Response
 ): Promise<void> {
   try {
     const customerHost = env.IS_DEVELOPMENT

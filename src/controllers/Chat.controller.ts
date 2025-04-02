@@ -43,17 +43,26 @@ export async function chatController(
 
     const cacheProductDataKey = `${platformName}-${hostName}-${slug}`;
 
-    const cachedProductData = await getCachedProductData(cacheProductDataKey);
-
     let productDataAsVector: string[] = [];
 
-    if (!cachedProductData) {
+    try {
+      const cachedProductData = await getCachedProductData(cacheProductDataKey);
+
+      if (!cachedProductData)
+        throw new Error("Não foi possível pegar o cache do produto.");
+
+      productDataAsVector = cachedProductData;
+    } catch (error) {
+      console.error(error);
+
       productDataAsVector =
         (await getProductDataAsVector(platformName, hostName, slug)) || [];
 
-      await cacheProductData(cacheProductDataKey, productDataAsVector);
-    } else {
-      productDataAsVector = cachedProductData;
+      try {
+        await cacheProductData(cacheProductDataKey, productDataAsVector);
+      } catch (error) {
+        console.error("Não foi possível salvar o cache do produto.", error);
+      }
     }
 
     const askToLLM = new AskToLLM(

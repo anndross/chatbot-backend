@@ -5,6 +5,10 @@ import { Stream } from "openai/streaming.mjs";
 import { getMappedMessageToLLMConfig } from "@/services/chat/ask-to-llm/mappedMessageToLLMConfig.ts";
 import { answerSchema } from "@/services/chat/ask-to-llm/answerSchema.ts";
 import { env } from "@/config/env";
+import {
+  cacheEmbeddingProductData,
+  getCachedEmbeddingProductData,
+} from "./cache";
 
 const openai = new OpenAI({ apiKey: env.OPENAI_KEY });
 
@@ -37,10 +41,6 @@ export class AskToLLM {
     this.vectorStore = new MemoryVectorStore(this.openAiEmbeddings);
   }
 
-  private get vectorStoreLength(): number {
-    return this.vectorStore.memoryVectors.length;
-  }
-
   private async searchRelevantInfoToQuestion(
     topK: number = 15
   ): Promise<string> {
@@ -58,19 +58,43 @@ export class AskToLLM {
   }
 
   private async embeddingProductData() {
-    if (this.vectorStoreLength > 0) return;
+    const cacheEmbeddingProductKey = `embeddingProductData - ${this.conversationId}`;
 
-    const embeddings: number[][] = await this.openAiEmbeddings.embedDocuments(
-      this.productData
-    );
+    try {
+      const cacheEmbeddingProductData = await getCachedEmbeddingProductData(
+        cacheEmbeddingProductKey
+      );
 
-    await this.vectorStore.addDocuments(
-      this.productData.map((text: string, index: number) => ({
-        pageContent: text,
-        embedding: embeddings[index],
-        metadata: {},
-      }))
-    );
+      if (!cacheEmbeddingProductData)
+        throw new Error(
+          "Não foi possível pegar o cache do embedding do produto."
+        );
+
+      this.vectorStore.memoryVectors = cacheEmbeddingProductData;
+    } catch (error) {
+      console.error(error);
+
+      const embeddings: number[][] = await this.openAiEmbeddings.embedDocuments(
+        this.productData
+      );
+
+      await this.vectorStore.addDocuments(
+        this.productData.map((text: string, index: number) => ({
+          pageContent: text,
+          embedding: embeddings[index],
+          metadata: {},
+        }))
+      );
+
+      try {
+        await cacheEmbeddingProductData(
+          cacheEmbeddingProductKey,
+          this.vectorStore.memoryVectors
+        );
+      } catch (error) {
+        console.error("Não foi possivel salvar o cache do produto.", error);
+      }
+    }
   }
 
   private async getMeaningfulInfosToQuestion(): Promise<string> {
