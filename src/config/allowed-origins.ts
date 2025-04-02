@@ -8,6 +8,7 @@ const ALLOWED_ORIGINS_DEV = [
   "http://localhost:5173",
   "http://localhost:3000",
   "http://localhost:5500",
+  "https://casamaisfacil.vtexlocal.com.br:3000",
 ];
 
 export const allowedOrigins = [
