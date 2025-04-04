@@ -105,7 +105,7 @@ export async function chatController(
     // Envia o json com as actions.
     res.status(200).write(textStore);
 
-    sendAnswerToSheets(name || host, question, textStore);
+    sendAnswerToSheets(name || host, question, textStore, slug);
 
     res.end();
   } catch (error) {
