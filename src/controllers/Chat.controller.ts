@@ -9,6 +9,7 @@ import {
   cacheProductData,
   getCachedProductData,
 } from "@/services/chat/vectorizer-product-data/cache";
+import { UAParser } from "ua-parser-js";
 
 export async function chatController(
   req: Request,
@@ -105,7 +106,21 @@ export async function chatController(
     // Envia o json com as actions.
     res.status(200).write(textStore);
 
-    sendAnswerToSheets(name || host, question, textStore, slug);
+    const { browser, device, os } = UAParser(req.headers["user-agent"]);
+
+    const deviceType = device?.type || "";
+    const browserNameWithVersion = `${browser?.name} ${browser?.version || ""}`;
+    const osNameWithVersion = `${os?.name} ${os?.version || ""}`;
+
+    sendAnswerToSheets(
+      name || host,
+      question,
+      textStore,
+      slug,
+      deviceType,
+      browserNameWithVersion,
+      osNameWithVersion
+    );
 
     res.end();
   } catch (error) {
