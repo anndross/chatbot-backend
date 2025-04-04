@@ -21,15 +21,25 @@ type Message = { role: "user" | "system"; content: string };
 export class AskToLLM {
   private question: string;
   private conversationId: string;
+  private productSlug: string;
+  private store: string;
   private productData: string[];
   private openAiEmbeddings: OpenAIEmbeddings;
   private vectorStore: MemoryVectorStore;
   private conversationHistory: ConversationHistory;
 
-  constructor(question: string, conversationId: string, productData: string[]) {
+  constructor(
+    question: string,
+    conversationId: string,
+    productData: string[],
+    store: string,
+    productSlug: string
+  ) {
     this.question = question;
     this.conversationId = conversationId;
     this.productData = productData;
+    this.productSlug = productSlug;
+    this.store = store;
 
     this.conversationHistory = {};
 
@@ -58,7 +68,7 @@ export class AskToLLM {
   }
 
   private async embeddingProductData() {
-    const cacheEmbeddingProductKey = `embeddingProductData - ${this.conversationId}`;
+    const cacheEmbeddingProductKey = `embeddingProductData-${this.store}-${this.productSlug}`;
 
     try {
       const cacheEmbeddingProductData = await getCachedEmbeddingProductData(

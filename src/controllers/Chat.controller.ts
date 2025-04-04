@@ -68,7 +68,9 @@ export async function chatController(
     const askToLLM = new AskToLLM(
       question,
       conversationId,
-      productDataAsVector
+      productDataAsVector,
+      name || host,
+      slug
     );
 
     const streamAnswer = await askToLLM.getStreamAnswer();
