@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export function sendAnswerToSheets(
+export async function sendAnswerToSheets(
   store: string,
   question: string,
   answer: string,
@@ -9,7 +9,7 @@ export function sendAnswerToSheets(
   browserNameWithVersion: string,
   osNameWithVersion: string
 ) {
-  axios.post(
+  const data = await axios.post(
     "https://script.google.com/macros/s/AKfycbwmCHP4VEW8Osa6krhLGKoSImC1oRJ_BWNTHuDDfcnvmvrEfLwFcatZNxxETyH5QZFQ/exec",
     {
       store: store,
@@ -21,4 +21,6 @@ export function sendAnswerToSheets(
       osNameWithVersion,
     }
   );
+
+  return { ok: data.status === 200 };
 }

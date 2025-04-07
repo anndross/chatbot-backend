@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   getRecommendedProductsController,
   minicartAddProductController,
+  addRatingController,
 } from "@/controllers/third-parties/index.ts";
 import { authMiddleware } from "@/middlewares/Auth.middleware.ts";
 
@@ -175,5 +176,83 @@ router.post(
   authMiddleware,
   minicartAddProductController
 );
+
+/**
+ * @swagger
+ * /api/add-rating:
+ *   post:
+ *     summary: Envia a avaliação do produto para o terceiro.
+ *     tags:
+ *       - Terceiros
+ *     security:
+ *       - AuthToken: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               product:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: string
+ *                   quantity:
+ *                     type: number
+ *                   seller:
+ *                     type: string
+ *               orderFormId:
+ *                 type: string
+ *                 example: "produto-xyz"
+ *               question:
+ *                 type: string
+ *                 example: "Para que serve esse produto?"
+ *               conversationId:
+ *                 type: string
+ *                 example: "1"
+ *     responses:
+ *       200:
+ *         description: Produto adicionado com sucesso ao minicart.
+ *         content:
+ *           application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  success:
+ *                    type: boolean
+ *                    example: true
+ *       400:
+ *         description: Dados inválidos ou IDs não fornecidos.
+ *         content:
+ *           application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  error:
+ *                    type: string
+ *                    example: "É necessário fornecer os IDs corretos."
+ *       401:
+ *         description: Token de autorização ausente ou inválido.
+ *         content:
+ *           application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  error:
+ *                    type: string
+ *                    example: "O token de autorização é obrigatório."
+ *       500:
+ *         description: Erro ao adicionar o produto.
+ *         content:
+ *           application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  error:
+ *                    type: string
+ *                    example: "Produto não adicionado devido a um erro interno."
+ */
+router.post("/add-rating", authMiddleware, addRatingController);
 
 export default router;

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 
 import { AuthRequest } from "@/middlewares/Auth.middleware.ts";
-import { sendAnswerToSheets } from "@/services/chat/sendAnswerToSheets.ts";
+import { sendAnswerToSheets } from "@/third-parties/sendAnswerToSheets";
 import { AskToLLM } from "@/services/chat/ask-to-llm/index.ts";
 import { getProductDataAsVector } from "@/services/chat/vectorizer-product-data/index.ts";
 import { getHostName } from "@/utils/getHostName.ts";
