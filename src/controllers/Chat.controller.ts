@@ -15,7 +15,7 @@ export async function chatController(
   req: Request,
   res: Response
 ): Promise<void> {
-  const { question, conversationId, slug } = req.body;
+  const { question, slug } = req.body;
 
   const { name, host, platformName } = (req as AuthRequest).customer || {};
 
@@ -40,38 +40,9 @@ export async function chatController(
 
   try {
     const hostName = getHostName(host);
-
-    const cacheProductDataKey = `${platformName}-${hostName}-${slug}`;
-
-    let productDataAsVector: string[] = [];
-
-    try {
-      const cachedProductData = await getCachedProductData(cacheProductDataKey);
-
-      if (!cachedProductData)
-        throw new Error("Não foi possível pegar o cache do produto.");
-
-      productDataAsVector = cachedProductData;
-    } catch (error) {
-      console.error(error);
-
-      productDataAsVector =
-        (await getProductDataAsVector(platformName, hostName, slug)) || [];
-
-      try {
-        await cacheProductData(cacheProductDataKey, productDataAsVector);
-      } catch (error) {
-        console.error("Não foi possível salvar o cache do produto.", error);
-      }
-    }
-
-    const askToLLM = new AskToLLM(
-      question,
-      productDataAsVector,
-      hostName,
-      slug
-    );
-    await askToLLM.setup(conversationId);
+    console.log("hostName", hostName);
+    const askToLLM = new AskToLLM(question, platformName, hostName, slug);
+    await askToLLM.setup();
 
     res.setHeader("Access-Control-Expose-Headers", "X-Thread-Id");
     res.writeHead(200, {
