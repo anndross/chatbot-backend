@@ -1,15 +1,15 @@
 import { Request, Response } from "express";
 
 import { AuthRequest } from "@/middlewares/Auth.middleware.ts";
-import { sendAnswerToSheets } from "@/third-parties/sendAnswerToSheets";
-import { AskToLLM } from "@/services/chat/ask-to-llm/index.ts";
+// import { sendAnswerToSheets } from "@/third-parties/sendAnswerToSheets";
+import { AskToLLM } from "@/services/chat/ask-to-llm/index.mcp.ts";
 import { getProductDataAsVector } from "@/services/chat/vectorizer-product-data/index.ts";
 import { getHostName } from "@/utils/getHostName.ts";
 import {
   cacheProductData,
   getCachedProductData,
 } from "@/services/chat/vectorizer-product-data/cache";
-import { UAParser } from "ua-parser-js";
+// import { UAParser } from "ua-parser-js";
 
 export async function chatController(
   req: Request,
@@ -31,10 +31,9 @@ export async function chatController(
     return;
   }
 
-  if (!conversationId || !question) {
+  if (!question) {
     res.status(400).json({
-      error:
-        "É necessário passar todos os dados (slug, question e conversationId).",
+      error: "É necessário passar a question.",
     });
     return;
   }
@@ -68,63 +67,42 @@ export async function chatController(
 
     const askToLLM = new AskToLLM(
       question,
-      conversationId,
       productDataAsVector,
-      name || host,
+      hostName,
       slug
     );
+    await askToLLM.setup(conversationId);
 
-    const streamAnswer = await askToLLM.getStreamAnswer();
+    res.setHeader("Access-Control-Expose-Headers", "X-Thread-Id");
+    res.writeHead(200, {
+      "Content-Type": "text/html; charset=utf-8",
+      "Transfer-Encoding": "chunked",
+      "X-Thread-Id": askToLLM.getThreadId() || "",
+    });
 
-    if (!streamAnswer) throw new Error("Não houve resposta do chat.");
+    await askToLLM.getStreamAnswer(res);
 
-    let textStore = ""; // Armazena o buffer completo em string
+    // const { browser, device, os } = UAParser(req.headers["user-agent"]);
 
-    for await (const chunk of streamAnswer) {
-      const chunkContent = chunk.choices[0]?.delta?.content;
+    // const deviceType = device?.type || "";
+    // const browserNameWithVersion = `${browser?.name} ${browser?.version || ""}`;
+    // const osNameWithVersion = `${os?.name} ${os?.version || ""}`;
 
-      textStore += chunkContent || "";
-
-      const rgxToGetOnlyFinalResponseContent = new RegExp(
-        /"answer"\s*:\s*"\w*/
-      );
-
-      const isFinalResponse = textStore.match(rgxToGetOnlyFinalResponseContent);
-
-      const isEndOfResponse = textStore.match(/",/);
-
-      if (isFinalResponse && !isEndOfResponse) {
-        res
-          .status(200)
-          .write(
-            chunkContent?.replace('":"', "").replace(/\n/g, "<br/>") || ""
-          );
-      }
-    }
-
-    // Envia a resposta para o cliente após estar completa.
-    // Envia o json com as actions.
-    res.status(200).write(textStore);
-
-    const { browser, device, os } = UAParser(req.headers["user-agent"]);
-
-    const deviceType = device?.type || "";
-    const browserNameWithVersion = `${browser?.name} ${browser?.version || ""}`;
-    const osNameWithVersion = `${os?.name} ${os?.version || ""}`;
-
-    sendAnswerToSheets(
-      name || host,
-      question,
-      textStore,
-      slug,
-      deviceType,
-      browserNameWithVersion,
-      osNameWithVersion
-    );
-
-    res.end();
+    // sendAnswerToSheets(
+    //   name || host,
+    //   question,
+    //   textStore,
+    //   slug,
+    //   deviceType,
+    //   browserNameWithVersion,
+    //   osNameWithVersion
+    // );
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Ocorreu um erro interno" });
+    if (!res.headersSent) {
+      res.status(500).json({ error: "Ocorreu um erro interno" });
+    } else {
+      res.end("Ocorreu um erro no servidor.");
+    }
   }
 }
