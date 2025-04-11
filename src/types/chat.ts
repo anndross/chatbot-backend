@@ -1,1 +1,1 @@
-export type ToolsFunctionsOptions = "getOrderStatus";
+export type ToolsFunctionsOptions = "getOrderStatus" | "getRecommendedProducts";

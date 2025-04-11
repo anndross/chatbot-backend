@@ -1,4 +1,9 @@
+import {
+  GetOrderStatusResponse,
+  GetShippingPriceResponse,
+} from "./mapped-responses.ts";
 import { VtexProductToAdd } from "./vtex/add-to-cart.ts";
+import { GetShippingPriceBody } from "./vtex/get-shipping-price.ts";
 import { VtexProductBySlug } from "./vtex/product-by-slug.ts";
 import { VtexRecommendedProducts } from "./vtex/recommended-products.ts";
 
@@ -16,4 +21,12 @@ export type SupportedMethods = {
     ids: string[],
     store: string
   ) => Promise<VtexRecommendedProducts | []>;
+  getOrderStatus: (
+    store: string,
+    orderId: string
+  ) => Promise<GetOrderStatusResponse>;
+  getShippingPrice: (
+    store: string,
+    body: GetShippingPriceBody
+  ) => Promise<GetShippingPriceResponse>;
 };

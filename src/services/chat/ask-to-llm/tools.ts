@@ -1,12 +1,17 @@
-import { ToolsFunctionsOptions } from "@/types/chat";
-import axios from "axios";
+import { thirdParties } from "@/third-parties";
+import { SupportedPlatforms } from "@/types/third-parties/supported-platforms";
+import { GetShippingPriceBody } from "@/types/third-parties/vtex/get-shipping-price";
 
 export class MCPFunctionsTools {
-  platformName: string;
+  platformName: SupportedPlatforms;
   store: string;
   productSlug: string;
 
-  constructor(platformName: string, store: string, productSlug: string) {
+  constructor(
+    platformName: SupportedPlatforms,
+    store: string,
+    productSlug: string
+  ) {
     this.platformName = platformName;
     this.store = store;
     this.productSlug = productSlug;
@@ -20,53 +25,47 @@ export class MCPFunctionsTools {
       this.productSlug
     );
 
-    const { data } = await axios.get(
-      `https://${this.store}.vtexcommercestable.com.br/api/oms/pvt/orders/${dataWithId.id}`,
-      {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          "X-VTEX-API-AppKey": "vtexappkey-casamaisfacil-QKEWDY",
-          "X-VTEX-API-AppToken":
-            "KAPVRMWQKWEHXFOCQNKPJLVAVIVEJNPOEGPZYLUXQTURPHRDUIPHAXRRWBILXVZGRGIWBAALHMSNTIBMAWNRTRUNOSAVJQKXVSMPXOLQRBYIJCFBKKIGZLVHDZCLRKSP",
-          VtexIdclientAutCookie: "",
-        },
+    try {
+      const data = await thirdParties[this.platformName].getOrderStatus(
+        this.store,
+        dataWithId.id
+      );
+
+      if (!data) {
+        return "Não foi encontrada nenhuma informação para o id fornecido";
       }
-    );
 
-    console.log("getOrderStatus", data);
-
-    if (!data) {
-      return "Não foi encontrado nenhuma informação para o id fornecido";
+      return data;
+    } catch (error) {
+      console.error(error);
+      return "Não foi encontrada nenhuma informação para o id fornecido";
     }
+  }
+
+  async getRecommendedProducts(dataWithIds: { ids: string[] }) {
+    const products = await thirdParties[
+      this.platformName
+    ].getRecommendedProducts(dataWithIds.ids, this.store);
 
     return {
-      status: data.status,
+      ui_action: {
+        type: "recommended_products",
+        data: products,
+      },
     };
   }
-}
 
-export function getCurrentTool(
-  toolName: string,
-  platformName: string,
-  store: string,
-  productSlug: string
-) {
-  console.log("getCurrentTool", store, platformName, productSlug);
+  async getShippingPrice(body: GetShippingPriceBody) {
+    console.log("getShippingPrice", body);
+    const price = await thirdParties[this.platformName].getShippingPrice(
+      this.store,
+      body
+    );
 
-  const mcpFunctionsTools = new MCPFunctionsTools(
-    platformName,
-    store,
-    productSlug
-  );
+    if (!price) {
+      return "Não foi possível encontrar o frete. Tente novamente com outro CEP.";
+    }
 
-  const tools: Record<ToolsFunctionsOptions, Function> = {
-    getOrderStatus: mcpFunctionsTools.getOrderStatus,
-  };
-
-  if (!Object.keys(tools).includes(toolName)) {
-    return null;
+    return price;
   }
-
-  return tools[toolName as ToolsFunctionsOptions];
 }
